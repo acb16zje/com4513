@@ -1,0 +1,3525 @@
+\documentclass[11pt]{article}
+
+    \usepackage[breakable]{tcolorbox}
+    \usepackage{parskip} % Stop auto-indenting (to mimic markdown behaviour)
+
+    \usepackage{iftex}
+    \ifPDFTeX
+    	\usepackage[T1]{fontenc}
+    	\usepackage{mathpazo}
+    \else
+    	\usepackage{fontspec}
+    \fi
+    
+    % Basic figure setup, for now with no caption control since it's done
+    % automatically by Pandoc (which extracts ![](path) syntax from Markdown).
+    \usepackage{graphicx}
+    % Maintain compatibility with old templates. Remove in nbconvert 6.0
+    \let\Oldincludegraphics\includegraphics
+    % Ensure that by default, figures have no caption (until we provide a
+    % proper Figure object with a Caption API and a way to capture that
+    % in the conversion process - todo).
+    \usepackage{caption}
+    \DeclareCaptionFormat{nocaption}{}
+    \captionsetup{format=nocaption,aboveskip=0pt,belowskip=0pt}
+
+    \usepackage[Export]{adjustbox} % Used to constrain images to a maximum size
+    \adjustboxset{max size={0.9\linewidth}{0.9\paperheight}}
+    \usepackage{float}
+    \floatplacement{figure}{H} % forces figures to be placed at the correct location
+    \usepackage{xcolor} % Allow colors to be defined
+    \usepackage{enumerate} % Needed for markdown enumerations to work
+    \usepackage{geometry} % Used to adjust the document margins
+    \usepackage{amsmath} % Equations
+    \usepackage{amssymb} % Equations
+    \usepackage{textcomp} % defines textquotesingle
+    % Hack from http://tex.stackexchange.com/a/47451/13684:
+    \AtBeginDocument{%
+        \def\PYZsq{\textquotesingle}% Upright quotes in Pygmentized code
+    }
+    \usepackage{upquote} % Upright quotes for verbatim code
+    \usepackage{eurosym} % defines \euro
+    \usepackage[mathletters]{ucs} % Extended unicode (utf-8) support
+    \usepackage{fancyvrb} % verbatim replacement that allows latex
+    \usepackage{grffile} % extends the file name processing of package graphics
+                         % to support a larger range
+    \makeatletter % fix for grffile with XeLaTeX
+    \def\Gread@@xetex#1{%
+      \IfFileExists{"\Gin@base".bb}%
+      {\Gread@eps{\Gin@base.bb}}%
+      {\Gread@@xetex@aux#1}%
+    }
+    \makeatother
+
+    % The hyperref package gives us a pdf with properly built
+    % internal navigation ('pdf bookmarks' for the table of contents,
+    % internal cross-reference links, web links for URLs, etc.)
+    \usepackage{hyperref}
+    % The default LaTeX title has an obnoxious amount of whitespace. By default,
+    % titling removes some of it. It also provides customization options.
+    \usepackage{titling}
+    \usepackage{longtable} % longtable support required by pandoc >1.10
+    \usepackage{booktabs}  % table support for pandoc > 1.12.2
+    \usepackage[inline]{enumitem} % IRkernel/repr support (it uses the enumerate* environment)
+    \usepackage[normalem]{ulem} % ulem is needed to support strikethroughs (\sout)
+                                % normalem makes italics be italics, not underlines
+    \usepackage{mathrsfs}
+
+
+
+    % Colors for the hyperref package
+    \definecolor{urlcolor}{rgb}{0,.145,.698}
+    \definecolor{linkcolor}{rgb}{.71,0.21,0.01}
+    \definecolor{citecolor}{rgb}{.12,.54,.11}
+
+    % ANSI colors
+    \definecolor{ansi-black}{HTML}{3E424D}
+    \definecolor{ansi-black-intense}{HTML}{282C36}
+    \definecolor{ansi-red}{HTML}{E75C58}
+    \definecolor{ansi-red-intense}{HTML}{B22B31}
+    \definecolor{ansi-green}{HTML}{00A250}
+    \definecolor{ansi-green-intense}{HTML}{007427}
+    \definecolor{ansi-yellow}{HTML}{DDB62B}
+    \definecolor{ansi-yellow-intense}{HTML}{B27D12}
+    \definecolor{ansi-blue}{HTML}{208FFB}
+    \definecolor{ansi-blue-intense}{HTML}{0065CA}
+    \definecolor{ansi-magenta}{HTML}{D160C4}
+    \definecolor{ansi-magenta-intense}{HTML}{A03196}
+    \definecolor{ansi-cyan}{HTML}{60C6C8}
+    \definecolor{ansi-cyan-intense}{HTML}{258F8F}
+    \definecolor{ansi-white}{HTML}{C5C1B4}
+    \definecolor{ansi-white-intense}{HTML}{A1A6B2}
+    \definecolor{ansi-default-inverse-fg}{HTML}{FFFFFF}
+    \definecolor{ansi-default-inverse-bg}{HTML}{000000}
+
+    % commands and environments needed by pandoc snippets
+    % extracted from the output of `pandoc -s`
+    \providecommand{\tightlist}{%
+      \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+    \DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+    % Add ',fontsize=\small' for more characters per line
+    \newenvironment{Shaded}{}{}
+    \newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{\textbf{{#1}}}}
+    \newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.56,0.13,0.00}{{#1}}}
+    \newcommand{\DecValTok}[1]{\textcolor[rgb]{0.25,0.63,0.44}{{#1}}}
+    \newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.25,0.63,0.44}{{#1}}}
+    \newcommand{\FloatTok}[1]{\textcolor[rgb]{0.25,0.63,0.44}{{#1}}}
+    \newcommand{\CharTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
+    \newcommand{\StringTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
+    \newcommand{\CommentTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textit{{#1}}}}
+    \newcommand{\OtherTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{{#1}}}
+    \newcommand{\AlertTok}[1]{\textcolor[rgb]{1.00,0.00,0.00}{\textbf{{#1}}}}
+    \newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.02,0.16,0.49}{{#1}}}
+    \newcommand{\RegionMarkerTok}[1]{{#1}}
+    \newcommand{\ErrorTok}[1]{\textcolor[rgb]{1.00,0.00,0.00}{\textbf{{#1}}}}
+    \newcommand{\NormalTok}[1]{{#1}}
+
+    % Additional commands for more recent versions of Pandoc
+    \newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.53,0.00,0.00}{{#1}}}
+    \newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
+    \newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
+    \newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.73,0.40,0.53}{{#1}}}
+    \newcommand{\ImportTok}[1]{{#1}}
+    \newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.73,0.13,0.13}{\textit{{#1}}}}
+    \newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{{#1}}}}}
+    \newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{{#1}}}}}
+    \newcommand{\VariableTok}[1]{\textcolor[rgb]{0.10,0.09,0.49}{{#1}}}
+    \newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{\textbf{{#1}}}}
+    \newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.40,0.40,0.40}{{#1}}}
+    \newcommand{\BuiltInTok}[1]{{#1}}
+    \newcommand{\ExtensionTok}[1]{{#1}}
+    \newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.74,0.48,0.00}{{#1}}}
+    \newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.49,0.56,0.16}{{#1}}}
+    \newcommand{\InformationTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{{#1}}}}}
+    \newcommand{\WarningTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{{#1}}}}}
+
+
+    % Define a nice break command that doesn't care if a line doesn't already
+    % exist.
+    \def\br{\hspace*{\fill} \\* }
+    % Math Jax compatibility definitions
+    \def\gt{>}
+    \def\lt{<}
+    \let\Oldtex\TeX
+    \let\Oldlatex\LaTeX
+    \renewcommand{\TeX}{\textrm{\Oldtex}}
+    \renewcommand{\LaTeX}{\textrm{\Oldlatex}}
+    % Document parameters
+    % Document title
+    \title{assignment1}
+
+
+
+
+
+% Pygments definitions
+\makeatletter
+\def\PY@reset{\let\PY@it=\relax \let\PY@bf=\relax%
+    \let\PY@ul=\relax \let\PY@tc=\relax%
+    \let\PY@bc=\relax \let\PY@ff=\relax}
+\def\PY@tok#1{\csname PY@tok@#1\endcsname}
+\def\PY@toks#1+{\ifx\relax#1\empty\else%
+    \PY@tok{#1}\expandafter\PY@toks\fi}
+\def\PY@do#1{\PY@bc{\PY@tc{\PY@ul{%
+    \PY@it{\PY@bf{\PY@ff{#1}}}}}}}
+\def\PY#1#2{\PY@reset\PY@toks#1+\relax+\PY@do{#2}}
+
+\expandafter\def\csname PY@tok@w\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.73,0.73}{##1}}}
+\expandafter\def\csname PY@tok@c\endcsname{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.25,0.50,0.50}{##1}}}
+\expandafter\def\csname PY@tok@cp\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.74,0.48,0.00}{##1}}}
+\expandafter\def\csname PY@tok@k\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@kp\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@kt\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.69,0.00,0.25}{##1}}}
+\expandafter\def\csname PY@tok@o\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@ow\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.67,0.13,1.00}{##1}}}
+\expandafter\def\csname PY@tok@nb\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@nf\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
+\expandafter\def\csname PY@tok@nc\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
+\expandafter\def\csname PY@tok@nn\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
+\expandafter\def\csname PY@tok@ne\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.82,0.25,0.23}{##1}}}
+\expandafter\def\csname PY@tok@nv\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\expandafter\def\csname PY@tok@no\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.53,0.00,0.00}{##1}}}
+\expandafter\def\csname PY@tok@nl\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.63,0.63,0.00}{##1}}}
+\expandafter\def\csname PY@tok@ni\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.60,0.60,0.60}{##1}}}
+\expandafter\def\csname PY@tok@na\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.49,0.56,0.16}{##1}}}
+\expandafter\def\csname PY@tok@nt\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@nd\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.67,0.13,1.00}{##1}}}
+\expandafter\def\csname PY@tok@s\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@sd\endcsname{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@si\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.73,0.40,0.53}{##1}}}
+\expandafter\def\csname PY@tok@se\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.73,0.40,0.13}{##1}}}
+\expandafter\def\csname PY@tok@sr\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.40,0.53}{##1}}}
+\expandafter\def\csname PY@tok@ss\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\expandafter\def\csname PY@tok@sx\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@m\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@gh\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,0.50}{##1}}}
+\expandafter\def\csname PY@tok@gu\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.50,0.00,0.50}{##1}}}
+\expandafter\def\csname PY@tok@gd\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.63,0.00,0.00}{##1}}}
+\expandafter\def\csname PY@tok@gi\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.63,0.00}{##1}}}
+\expandafter\def\csname PY@tok@gr\endcsname{\def\PY@tc##1{\textcolor[rgb]{1.00,0.00,0.00}{##1}}}
+\expandafter\def\csname PY@tok@ge\endcsname{\let\PY@it=\textit}
+\expandafter\def\csname PY@tok@gs\endcsname{\let\PY@bf=\textbf}
+\expandafter\def\csname PY@tok@gp\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,0.50}{##1}}}
+\expandafter\def\csname PY@tok@go\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.53,0.53,0.53}{##1}}}
+\expandafter\def\csname PY@tok@gt\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.27,0.87}{##1}}}
+\expandafter\def\csname PY@tok@err\endcsname{\def\PY@bc##1{\setlength{\fboxsep}{0pt}\fcolorbox[rgb]{1.00,0.00,0.00}{1,1,1}{\strut ##1}}}
+\expandafter\def\csname PY@tok@kc\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@kd\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@kn\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@kr\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@bp\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@fm\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
+\expandafter\def\csname PY@tok@vc\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\expandafter\def\csname PY@tok@vg\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\expandafter\def\csname PY@tok@vi\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\expandafter\def\csname PY@tok@vm\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\expandafter\def\csname PY@tok@sa\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@sb\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@sc\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@dl\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@s2\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@sh\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@s1\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@mb\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@mf\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@mh\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@mi\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@il\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@mo\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@ch\endcsname{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.25,0.50,0.50}{##1}}}
+\expandafter\def\csname PY@tok@cm\endcsname{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.25,0.50,0.50}{##1}}}
+\expandafter\def\csname PY@tok@cpf\endcsname{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.25,0.50,0.50}{##1}}}
+\expandafter\def\csname PY@tok@c1\endcsname{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.25,0.50,0.50}{##1}}}
+\expandafter\def\csname PY@tok@cs\endcsname{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.25,0.50,0.50}{##1}}}
+
+\def\PYZbs{\char`\\}
+\def\PYZus{\char`\_}
+\def\PYZob{\char`\{}
+\def\PYZcb{\char`\}}
+\def\PYZca{\char`\^}
+\def\PYZam{\char`\&}
+\def\PYZlt{\char`\<}
+\def\PYZgt{\char`\>}
+\def\PYZsh{\char`\#}
+\def\PYZpc{\char`\%}
+\def\PYZdl{\char`\$}
+\def\PYZhy{\char`\-}
+\def\PYZsq{\char`\'}
+\def\PYZdq{\char`\"}
+\def\PYZti{\char`\~}
+% for compatibility with earlier versions
+\def\PYZat{@}
+\def\PYZlb{[}
+\def\PYZrb{]}
+\makeatother
+
+
+    % For linebreaks inside Verbatim environment from package fancyvrb.
+    \makeatletter
+        \newbox\Wrappedcontinuationbox
+        \newbox\Wrappedvisiblespacebox
+        \newcommand*\Wrappedvisiblespace {\textcolor{red}{\textvisiblespace}}
+        \newcommand*\Wrappedcontinuationsymbol {\textcolor{red}{\llap{\tiny$\m@th\hookrightarrow$}}}
+        \newcommand*\Wrappedcontinuationindent {3ex }
+        \newcommand*\Wrappedafterbreak {\kern\Wrappedcontinuationindent\copy\Wrappedcontinuationbox}
+        % Take advantage of the already applied Pygments mark-up to insert
+        % potential linebreaks for TeX processing.
+        %        {, <, #, %, $, ' and ": go to next line.
+        %        _, }, ^, &, >, - and ~: stay at end of broken line.
+        % Use of \textquotesingle for straight quote.
+        \newcommand*\Wrappedbreaksatspecials {%
+            \def\PYGZus{\discretionary{\char`\_}{\Wrappedafterbreak}{\char`\_}}%
+            \def\PYGZob{\discretionary{}{\Wrappedafterbreak\char`\{}{\char`\{}}%
+            \def\PYGZcb{\discretionary{\char`\}}{\Wrappedafterbreak}{\char`\}}}%
+            \def\PYGZca{\discretionary{\char`\^}{\Wrappedafterbreak}{\char`\^}}%
+            \def\PYGZam{\discretionary{\char`\&}{\Wrappedafterbreak}{\char`\&}}%
+            \def\PYGZlt{\discretionary{}{\Wrappedafterbreak\char`\<}{\char`\<}}%
+            \def\PYGZgt{\discretionary{\char`\>}{\Wrappedafterbreak}{\char`\>}}%
+            \def\PYGZsh{\discretionary{}{\Wrappedafterbreak\char`\#}{\char`\#}}%
+            \def\PYGZpc{\discretionary{}{\Wrappedafterbreak\char`\%}{\char`\%}}%
+            \def\PYGZdl{\discretionary{}{\Wrappedafterbreak\char`\$}{\char`\$}}%
+            \def\PYGZhy{\discretionary{\char`\-}{\Wrappedafterbreak}{\char`\-}}%
+            \def\PYGZsq{\discretionary{}{\Wrappedafterbreak\textquotesingle}{\textquotesingle}}%
+            \def\PYGZdq{\discretionary{}{\Wrappedafterbreak\char`\"}{\char`\"}}%
+            \def\PYGZti{\discretionary{\char`\~}{\Wrappedafterbreak}{\char`\~}}%
+        }
+        % Some characters . , ; ? ! / are not pygmentized.
+        % This macro makes them "active" and they will insert potential linebreaks
+        \newcommand*\Wrappedbreaksatpunct {%
+            \lccode`\~`\.\lowercase{\def~}{\discretionary{\hbox{\char`\.}}{\Wrappedafterbreak}{\hbox{\char`\.}}}%
+            \lccode`\~`\,\lowercase{\def~}{\discretionary{\hbox{\char`\,}}{\Wrappedafterbreak}{\hbox{\char`\,}}}%
+            \lccode`\~`\;\lowercase{\def~}{\discretionary{\hbox{\char`\;}}{\Wrappedafterbreak}{\hbox{\char`\;}}}%
+            \lccode`\~`\:\lowercase{\def~}{\discretionary{\hbox{\char`\:}}{\Wrappedafterbreak}{\hbox{\char`\:}}}%
+            \lccode`\~`\?\lowercase{\def~}{\discretionary{\hbox{\char`\?}}{\Wrappedafterbreak}{\hbox{\char`\?}}}%
+            \lccode`\~`\!\lowercase{\def~}{\discretionary{\hbox{\char`\!}}{\Wrappedafterbreak}{\hbox{\char`\!}}}%
+            \lccode`\~`\/\lowercase{\def~}{\discretionary{\hbox{\char`\/}}{\Wrappedafterbreak}{\hbox{\char`\/}}}%
+            \catcode`\.\active
+            \catcode`\,\active
+            \catcode`\;\active
+            \catcode`\:\active
+            \catcode`\?\active
+            \catcode`\!\active
+            \catcode`\/\active
+            \lccode`\~`\~
+        }
+    \makeatother
+
+    \let\OriginalVerbatim=\Verbatim
+    \makeatletter
+    \renewcommand{\Verbatim}[1][1]{%
+        %\parskip\z@skip
+        \sbox\Wrappedcontinuationbox {\Wrappedcontinuationsymbol}%
+        \sbox\Wrappedvisiblespacebox {\FV@SetupFont\Wrappedvisiblespace}%
+        \def\FancyVerbFormatLine ##1{\hsize\linewidth
+            \vtop{\raggedright\hyphenpenalty\z@\exhyphenpenalty\z@
+                \doublehyphendemerits\z@\finalhyphendemerits\z@
+                \strut ##1\strut}%
+        }%
+        % If the linebreak is at a space, the latter will be displayed as visible
+        % space at end of first line, and a continuation symbol starts next line.
+        % Stretch/shrink are however usually zero for typewriter font.
+        \def\FV@Space {%
+            \nobreak\hskip\z@ plus\fontdimen3\font minus\fontdimen4\font
+            \discretionary{\copy\Wrappedvisiblespacebox}{\Wrappedafterbreak}
+            {\kern\fontdimen2\font}%
+        }%
+
+        % Allow breaks at special characters using \PYG... macros.
+        \Wrappedbreaksatspecials
+        % Breaks at punctuation characters . , ; ? ! and / need catcode=\active
+        \OriginalVerbatim[#1,codes*=\Wrappedbreaksatpunct]%
+    }
+    \makeatother
+
+    % Exact colors from NB
+    \definecolor{incolor}{HTML}{303F9F}
+    \definecolor{outcolor}{HTML}{D84315}
+    \definecolor{cellborder}{HTML}{CFCFCF}
+    \definecolor{cellbackground}{HTML}{F7F7F7}
+
+    % prompt
+    \makeatletter
+    \newcommand{\boxspacing}{\kern\kvtcb@left@rule\kern\kvtcb@boxsep}
+    \makeatother
+    \newcommand{\prompt}[4]{
+        \ttfamily\llap{{\color{#2}[#3]:\hspace{3pt}#4}}\vspace{-\baselineskip}
+    }
+
+
+
+    % Prevent overflowing lines due to hard-to-break entities
+    \sloppy
+    % Setup hyperref package
+    \hypersetup{
+      breaklinks=true,  % so long urls are correctly broken across lines
+      colorlinks=true,
+      urlcolor=urlcolor,
+      linkcolor=linkcolor,
+      citecolor=citecolor,
+      }
+    % Slightly bigger margins than the latex defaults
+
+    \geometry{verbose,tmargin=1in,bmargin=1in,lmargin=1in,rmargin=1in}
+
+
+
+\begin{document}
+
+    \maketitle
+
+
+
+
+    \hypertarget{com4513-6513-assignment-1-text-classification-with-logistic-regression}{%
+\subsection{{[}COM4513-6513{]} Assignment 1: Text Classification with
+Logistic
+Regression}\label{com4513-6513-assignment-1-text-classification-with-logistic-regression}}
+
+\hypertarget{instructor-nikos-aletras}{%
+\subsubsection{Instructor: Nikos
+Aletras}\label{instructor-nikos-aletras}}
+
+The goal of this assignment is to develop and test two text
+classification systems:
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{Task 1:} sentiment analysis, in particular, to predict the
+  sentiment of movie reviews, i.e.~positive or negative (binary
+  classification).
+\item
+  \textbf{Task 2:} topic classification, to predict whether a news
+  article is about International issues, Sports or Business (multiclass
+  classification).
+\end{itemize}
+
+For that purpose, you will implement:
+
+\begin{itemize}
+\tightlist
+\item
+  Text processing methods for extracting Bag-Of-Word features, using (1)
+  unigrams, bigrams and trigrams to obtain vector representations of
+  documents. Two vector weighting schemes should be tested: (1) raw
+  frequencies (\textbf{3 marks; 1 for each ngram type}); (2) tf.idf
+  (\textbf{1 marks}).
+\item
+  Binary Logistic Regression classifiers that will be able to accurately
+  classify movie reviews trained with (1) BOW-count (raw frequencies);
+  and (2) BOW-tfidf (tf.idf weighted) for Task 1.
+\item
+  Multiclass Logistic Regression classifiers that will be able to
+  accurately classify news articles trained with (1) BOW-count (raw
+  frequencies); and (2) BOW-tfidf (tf.idf weighted) for Task 2.
+\item
+  The Stochastic Gradient Descent (SGD) algorithm to estimate the
+  parameters of your Logistic Regression models. Your SGD algorithm
+  should:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Minimise the Binary Cross-entropy loss function for Task 1
+    (\textbf{3 marks})
+  \item
+    Minimise the Categorical Cross-entropy loss function for Task 2
+    (\textbf{3 marks})
+  \item
+    Use L2 regularisation (both tasks) (\textbf{1 mark})
+  \item
+    Perform multiple passes (epochs) over the training data (\textbf{1
+    mark})
+  \item
+    Randomise the order of training data after each pass (\textbf{1
+    mark})
+  \item
+    Stop training if the difference between the current and previous
+    validation loss is smaller than a threshold (\textbf{1 mark})
+  \item
+    After each epoch print the training and development loss (\textbf{1
+    mark})
+  \end{itemize}
+\item
+  Discuss how did you choose hyperparameters (e.g.~learning rate and
+  regularisation strength)? (\textbf{2 marks; 0.5 for each model in each
+  task}).
+\item
+  After training the LR models, plot the learning process (i.e.~training
+  and validation loss in each epoch) using a line plot (\textbf{1 mark;
+  0.5 for both BOW-count and BOW-tfidf LR models in each task}) and
+  discuss if your model overfits/underfits/is about right.
+\item
+  Model interpretability by showing the most important features for each
+  class (i.e.~most positive/negative weights). Give the top 10 for each
+  class and comment on whether they make sense (if they don't you might
+  have a bug!). If we were to apply the classifier we've learned into a
+  different domain such as laptop reviews or restaurant reviews, do you
+  think these features would generalise well? Can you propose what
+  features the classifier could pick up as important in the new domain?
+  (\textbf{2 marks; 0.5 for BOW-count and BOW-tfidf LR models
+  respectively in each task})
+\end{itemize}
+
+\hypertarget{data---task-1}{%
+\subsubsection{Data - Task 1}\label{data---task-1}}
+
+The data you will use for Task 1 is taken from here:
+\url{http://www.cs.cornell.edu/people/pabo/movie-review-data/} and you
+can find it in the \texttt{./data\_sentiment} folder in CSV format:
+
+\begin{itemize}
+\tightlist
+\item
+  \texttt{data\_sentiment/train.csv}: contains 1,400 reviews, 700
+  positive (label: 1) and 700 negative (label: 0) to be used for
+  training.
+\item
+  \texttt{data\_sentiment/dev.csv}: contains 200 reviews, 100 positive
+  and 100 negative to be used for hyperparameter selection and
+  monitoring the training process.
+\item
+  \texttt{data\_sentiment/test.csv}: contains 400 reviews, 200 positive
+  and 200 negative to be used for testing.
+\end{itemize}
+
+\hypertarget{data---task-2}{%
+\subsubsection{Data - Task 2}\label{data---task-2}}
+
+The data you will use for Task 2 is a subset of the
+\href{http://groups.di.unipi.it/~gulli/AG_corpus_of_news_articles.html}{AG
+News Corpus} and you can find it in the \texttt{./data\_topic} folder in
+CSV format:
+
+\begin{itemize}
+\tightlist
+\item
+  \texttt{data\_topic/train.csv}: contains 2,400 news articles, 800 for
+  each class to be used for training.
+\item
+  \texttt{data\_topic/dev.csv}: contains 150 news articles, 50 for each
+  class to be used for hyperparameter selection and monitoring the
+  training process.
+\item
+  \texttt{data\_topic/test.csv}: contains 900 news articles, 300 for
+  each class to be used for testing.
+\end{itemize}
+
+\hypertarget{submission-instructions}{%
+\subsubsection{Submission Instructions}\label{submission-instructions}}
+
+You should submit a Jupyter Notebook file (assignment1.ipynb) and an
+exported PDF version (you can do it from Jupyter:
+\texttt{File-\textgreater{}Download\ as-\textgreater{}PDF\ via\ Latex}).
+
+You are advised to follow the code structure given in this notebook by
+completing all given functions. You can also write any auxiliary/helper
+functions (and arguments for the functions) that you might need but note
+that you can provide a full solution without any such functions.
+Similarly, you can just use only the packages imported below but you are
+free to use any functionality from the
+\href{https://docs.python.org/2/library/index.html}{Python Standard
+Library}, NumPy, SciPy, and Pandas. You are not allowed to use any
+third-party library such as Scikit-learn (apart from metric functions
+already provided), NLTK, Spacy, Keras, etc.
+
+Please make sure to comment your code. You should also mention if you've
+used Windows (not recommended) to write and test your code. There is no
+single correct answer on what your accuracy should be, but correct
+implementations usually achieve F1-scores around 80\% or higher. The
+quality of the analysis of the results is as important as the accuracy
+itself.
+
+This assignment will be marked out of 20. It is worth 20\% of your final
+grade in the module.
+
+The deadline for this assignment is \textbf{23:59 on Fri, 20 Mar 2020}
+and it needs to be submitted via MOLE. Standard departmental penalties
+for lateness will be applied. We use a range of strategies to detect
+\href{https://www.sheffield.ac.uk/ssid/unfair-means/index}{unfair
+means}, including Turnitin which helps detect plagiarism, so make sure
+you do not plagiarise.
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{1}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{k+kn}{import} \PY{n+nn}{pandas} \PY{k}{as} \PY{n+nn}{pd}
+\PY{k+kn}{import} \PY{n+nn}{numpy} \PY{k}{as} \PY{n+nn}{np}
+\PY{k+kn}{from} \PY{n+nn}{collections} \PY{k+kn}{import} \PY{n}{Counter}
+\PY{k+kn}{import} \PY{n+nn}{re}
+\PY{k+kn}{import} \PY{n+nn}{matplotlib}\PY{n+nn}{.}\PY{n+nn}{pyplot} \PY{k}{as} \PY{n+nn}{plt}
+\PY{k+kn}{from} \PY{n+nn}{sklearn}\PY{n+nn}{.}\PY{n+nn}{metrics} \PY{k+kn}{import} \PY{n}{accuracy\PYZus{}score}\PY{p}{,} \PY{n}{precision\PYZus{}score}\PY{p}{,} \PY{n}{recall\PYZus{}score}\PY{p}{,} \PY{n}{f1\PYZus{}score}
+
+\PY{c+c1}{\PYZsh{} fixing random seed for reproducibility}
+\PY{n}{np}\PY{o}{.}\PY{n}{random}\PY{o}{.}\PY{n}{seed}\PY{p}{(}\PY{l+m+mi}{123}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \hypertarget{load-raw-texts-and-labels-into-arrays}{%
+\subsection{Load Raw texts and labels into
+arrays}\label{load-raw-texts-and-labels-into-arrays}}
+
+First, you need to load the training, development and test sets from
+their corresponding CSV files (tip: you can use Pandas dataframes).
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{2}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{sentiment\PYZus{}dev} \PY{o}{=} \PY{n}{pd}\PY{o}{.}\PY{n}{read\PYZus{}csv}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{data\PYZus{}sentiment/dev.csv}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{names}\PY{o}{=}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{text}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{label}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{)}
+\PY{n}{sentiment\PYZus{}test} \PY{o}{=} \PY{n}{pd}\PY{o}{.}\PY{n}{read\PYZus{}csv}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{data\PYZus{}sentiment/test.csv}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{names}\PY{o}{=}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{text}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{label}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{)}
+\PY{n}{sentiment\PYZus{}train} \PY{o}{=} \PY{n}{pd}\PY{o}{.}\PY{n}{read\PYZus{}csv}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{data\PYZus{}sentiment/train.csv}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{names}\PY{o}{=}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{text}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{label}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    If you use Pandas you can see a sample of the data.
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{3}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{sentiment\PYZus{}train}\PY{o}{.}\PY{n}{head}\PY{p}{(}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+            \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
+\prompt{Out}{outcolor}{3}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+                                                text  label
+0  note : some may consider portions of the follo{\ldots}      1
+1  note : some may consider portions of the follo{\ldots}      1
+2  every once in a while you see a film that is s{\ldots}      1
+3  when i was growing up in 1970s , boys in my sc{\ldots}      1
+4  the muppet movie is the first , and the best m{\ldots}      1
+\end{Verbatim}
+\end{tcolorbox}
+
+    The next step is to put the raw texts into Python lists and their
+corresponding labels into NumPy arrays:
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{4}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{sentiment\PYZus{}dev\PYZus{}texts} \PY{o}{=} \PY{n+nb}{list}\PY{p}{(}\PY{n}{sentiment\PYZus{}dev}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{text}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{)}
+\PY{n}{sentiment\PYZus{}dev\PYZus{}labels} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{array}\PY{p}{(}\PY{n}{sentiment\PYZus{}dev}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{label}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{)}
+
+\PY{n}{sentiment\PYZus{}test\PYZus{}texts} \PY{o}{=} \PY{n+nb}{list}\PY{p}{(}\PY{n}{sentiment\PYZus{}test}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{text}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{)}
+\PY{n}{sentiment\PYZus{}test\PYZus{}labels} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{array}\PY{p}{(}\PY{n}{sentiment\PYZus{}test}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{label}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{)}
+
+\PY{n}{sentiment\PYZus{}train\PYZus{}texts} \PY{o}{=} \PY{n+nb}{list}\PY{p}{(}\PY{n}{sentiment\PYZus{}train}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{text}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{)}
+\PY{n}{sentiment\PYZus{}train\PYZus{}labels} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{array}\PY{p}{(}\PY{n}{sentiment\PYZus{}train}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{label}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \hypertarget{bag-of-words-representation}{%
+\section{Bag-of-Words
+Representation}\label{bag-of-words-representation}}
+
+To train and test Logisitc Regression models, you first need to obtain
+vector representations for all documents given a vocabulary of features
+(unigrams, bigrams, trigrams).
+
+\hypertarget{text-pre-processing-pipeline}{%
+\subsection{Text Pre-Processing
+Pipeline}\label{text-pre-processing-pipeline}}
+
+To obtain a vocabulary of features, you should: - tokenise all texts
+into a list of unigrams (tip: using a regular expression) - remove stop
+words (using the one provided or one of your preference) - compute
+bigrams, trigrams given the remaining unigrams - remove ngrams appearing
+in less than K documents - use the remaining to create a vocabulary of
+unigrams, bigrams and trigrams (you can keep top N if you encounter
+memory issues).
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{5}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{default\PYZus{}stop\PYZus{}words} \PY{o}{=} \PY{p}{\PYZob{}}
+    \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{a}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{ad}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{after}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{again}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{all}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{also}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{am}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{an}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{and}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{any}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}
+    \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{are}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{as}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{at}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{be}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{because}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{been}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{being}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{between}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{both}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}
+    \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{but}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{by}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{can}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{could}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{does}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{each}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{ed}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{eg}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{either}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{etc}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}
+    \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{even}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{ever}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{every}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{for}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{from}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{had}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{has}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{have}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{he}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{her}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}
+    \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{hers}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{herself}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{him}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{himself}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{his}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{i}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{ie}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{if}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{in}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{inc}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}
+    \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{into}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{is}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{it}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{its}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{itself}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{li}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{ll}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{ltd}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{may}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{maybe}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}
+    \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{me}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{might}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{mine}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{minute}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{minutes}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{must}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{my}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{myself}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}
+    \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{neither}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{nor}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{now}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{of}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{on}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{only}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{or}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{other}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{our}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{ours}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}
+    \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{ourselves}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{own}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{same}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{seem}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{seemed}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{shall}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{she}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{some}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}
+    \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{somehow}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{something}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{sometimes}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{somewhat}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{somewhere}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{spoiler}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}
+    \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{spoilers}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{such}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{suppose}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{that}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{the}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{their}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{theirs}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{them}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}
+    \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{themselves}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{there}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{these}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{they}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{this}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{those}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{thus}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{to}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}
+    \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{today}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{tomorrow}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{us}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{ve}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{vs}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{was}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{we}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{were}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{what}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}
+    \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{whatever}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{when}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{where}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{which}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{who}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{whom}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{whose}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{will}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}
+    \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{with}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{yesterday}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{you}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{your}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{yours}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{yourself}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{yourselves}\PY{l+s+s1}{\PYZsq{}}
+\PY{p}{\PYZcb{}}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \hypertarget{n-gram-extraction-from-a-document}{%
+\subsubsection{N-gram extraction from a
+document}\label{n-gram-extraction-from-a-document}}
+
+You first need to implement the \texttt{extract\_ngrams} function. It
+takes as input: - \texttt{x\_raw}: a string corresponding to the raw
+text of a document - \texttt{ngram\_range}: a tuple of two integers
+denoting the type of ngrams you want to extract, e.g.~(1,2) denotes
+extracting unigrams and bigrams. - \texttt{token\_pattern}: a string to
+be used within a regular expression to extract all tokens. Note that
+data is already tokenised so you could opt for a simple white space
+tokenisation. - \texttt{stop\_words}: a list of stop words -
+\texttt{vocab}: a given vocabulary. It should be used to extract
+specific features.
+
+and returns:
+
+\begin{itemize}
+\tightlist
+\item
+  a list of all extracted features.
+\end{itemize}
+
+See the examples below to see how this function should work.
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{6}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{k}{def} \PY{n+nf}{extract\PYZus{}ngrams}\PY{p}{(}\PY{n}{x\PYZus{}raw}\PY{p}{,}
+                   \PY{n}{ngram\PYZus{}range}\PY{o}{=}\PY{p}{(}\PY{l+m+mi}{1}\PY{p}{,} \PY{l+m+mi}{3}\PY{p}{)}\PY{p}{,}
+                   \PY{n}{token\PYZus{}pattern}\PY{o}{=}\PY{l+s+sa}{r}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{\PYZbs{}}\PY{l+s+s1}{b[A\PYZhy{}Za\PYZhy{}z]}\PY{l+s+s1}{\PYZob{}}\PY{l+s+s1}{2,\PYZcb{}}\PY{l+s+s1}{\PYZbs{}}\PY{l+s+s1}{b}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}
+                   \PY{n}{stop\PYZus{}words}\PY{o}{=}\PY{n}{default\PYZus{}stop\PYZus{}words}\PY{p}{,}
+                   \PY{n}{vocab}\PY{o}{=}\PY{k+kc}{None}\PY{p}{)}\PY{p}{:}
+
+    \PY{n}{tokens} \PY{o}{=} \PY{p}{[}
+        \PY{n}{word}\PY{o}{.}\PY{n}{lower}\PY{p}{(}\PY{p}{)} \PY{k}{for} \PY{n}{word} \PY{o+ow}{in} \PY{n}{re}\PY{o}{.}\PY{n}{findall}\PY{p}{(}\PY{n}{token\PYZus{}pattern}\PY{p}{,} \PY{n}{x\PYZus{}raw}\PY{p}{)}
+        \PY{k}{if} \PY{n}{word}\PY{o}{.}\PY{n}{lower}\PY{p}{(}\PY{p}{)} \PY{o+ow}{not} \PY{o+ow}{in} \PY{n}{stop\PYZus{}words}
+    \PY{p}{]}
+
+    \PY{n}{ngrams} \PY{o}{=} \PY{p}{[}\PY{p}{]}
+
+    \PY{k}{for} \PY{n}{n} \PY{o+ow}{in} \PY{n+nb}{range}\PY{p}{(}\PY{n}{ngram\PYZus{}range}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{,} \PY{n}{ngram\PYZus{}range}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{]} \PY{o}{+} \PY{l+m+mi}{1}\PY{p}{)}\PY{p}{:}
+        \PY{k}{if} \PY{n}{n} \PY{o}{==} \PY{l+m+mi}{1}\PY{p}{:}
+            \PY{c+c1}{\PYZsh{} Create unigram by concatenating list}
+            \PY{n}{ngrams} \PY{o}{+}\PY{o}{=} \PY{n}{tokens}
+        \PY{k}{else}\PY{p}{:}
+            \PY{c+c1}{\PYZsh{} Create bigram / trigram by unzipping list}
+            \PY{n}{ngrams} \PY{o}{+}\PY{o}{=} \PY{n+nb}{zip}\PY{p}{(}\PY{o}{*}\PY{p}{(}\PY{n}{tokens}\PY{p}{[}\PY{n}{i}\PY{p}{:}\PY{p}{]} \PY{k}{for} \PY{n}{i} \PY{o+ow}{in} \PY{n+nb}{range}\PY{p}{(}\PY{n}{n}\PY{p}{)}\PY{p}{)}\PY{p}{)}
+
+    \PY{k}{return} \PY{p}{[}\PY{n}{ngram} \PY{k}{for} \PY{n}{ngram} \PY{o+ow}{in} \PY{n}{ngrams} \PY{k}{if} \PY{n}{ngram} \PY{o+ow}{in} \PY{n}{vocab}\PY{p}{]} \PY{k}{if} \PY{n}{vocab} \PY{k}{else} \PY{n}{ngrams}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{7}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{extract\PYZus{}ngrams}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{this is a great movie to watch}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+            \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
+\prompt{Out}{outcolor}{7}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+['great',
+ 'movie',
+ 'watch',
+ ('great', 'movie'),
+ ('movie', 'watch'),
+ ('great', 'movie', 'watch')]
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{8}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{extract\PYZus{}ngrams}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{this is a great movie to watch}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}
+               \PY{n}{ngram\PYZus{}range}\PY{o}{=}\PY{p}{(}\PY{l+m+mi}{1}\PY{p}{,} \PY{l+m+mi}{2}\PY{p}{)}\PY{p}{,}
+               \PY{n}{vocab}\PY{o}{=}\PY{p}{\PYZob{}}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{great}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{great}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{movie}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}\PY{p}{\PYZcb{}}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+            \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
+\prompt{Out}{outcolor}{8}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+['great', ('great', 'movie')]
+\end{Verbatim}
+\end{tcolorbox}
+
+    Note that it is OK to represent n-grams using lists instead of tuples:
+e.g.~\texttt{{[}\textquotesingle{}great\textquotesingle{},\ {[}\textquotesingle{}great\textquotesingle{},\ \textquotesingle{}movie\textquotesingle{}{]}{]}}
+
+    \hypertarget{create-a-vocabulary-of-n-grams}{%
+\subsubsection{Create a vocabulary of
+n-grams}\label{create-a-vocabulary-of-n-grams}}
+
+Then the \texttt{get\_vocab} function will be used to (1) create a
+vocabulary of ngrams; (2) count the document frequencies of ngrams; (3)
+their raw frequency. It takes as input: - \texttt{X\_raw}: a list of
+strings each corresponding to the raw text of a document -
+\texttt{ngram\_range}: a tuple of two integers denoting the type of
+ngrams you want to extract, e.g.~(1,2) denotes extracting unigrams and
+bigrams. - \texttt{token\_pattern}: a string to be used within a regular
+expression to extract all tokens. Note that data is already tokenised so
+you could opt for a simple white space tokenisation. -
+\texttt{stop\_words}: a list of stop words - \texttt{min\_df}: keep
+ngrams with a minimum document frequency. - \texttt{keep\_topN}: keep
+top-N more frequent ngrams.
+
+and returns:
+
+\begin{itemize}
+\tightlist
+\item
+  \texttt{vocab}: a set of the n-grams that will be used as features.
+\item
+  \texttt{df}: a Counter (or dict) that contains ngrams as keys and
+  their corresponding document frequency as values.
+\item
+  \texttt{ngram\_counts}: counts of each ngram in vocab
+\end{itemize}
+
+Hint: it should make use of the \texttt{extract\_ngrams} function.
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{9}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{k}{def} \PY{n+nf}{get\PYZus{}vocab}\PY{p}{(}\PY{n}{X\PYZus{}raw}\PY{p}{,}
+              \PY{n}{ngram\PYZus{}range}\PY{o}{=}\PY{p}{(}\PY{l+m+mi}{1}\PY{p}{,} \PY{l+m+mi}{3}\PY{p}{)}\PY{p}{,}
+              \PY{n}{token\PYZus{}pattern}\PY{o}{=}\PY{l+s+sa}{r}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{\PYZbs{}}\PY{l+s+s1}{b[A\PYZhy{}Za\PYZhy{}z]}\PY{l+s+s1}{\PYZob{}}\PY{l+s+s1}{2,\PYZcb{}}\PY{l+s+s1}{\PYZbs{}}\PY{l+s+s1}{b}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}
+              \PY{n}{min\PYZus{}df}\PY{o}{=}\PY{l+m+mi}{1}\PY{p}{,}
+              \PY{n}{keep\PYZus{}topN}\PY{o}{=}\PY{k+kc}{None}\PY{p}{,}
+              \PY{n}{stop\PYZus{}words}\PY{o}{=}\PY{n}{default\PYZus{}stop\PYZus{}words}\PY{p}{)}\PY{p}{:}
+
+    \PY{n}{df} \PY{o}{=} \PY{n}{Counter}\PY{p}{(}\PY{p}{)}
+    \PY{n}{ngram\PYZus{}counts} \PY{o}{=} \PY{n}{Counter}\PY{p}{(}\PY{p}{)}
+
+    \PY{k}{for} \PY{n}{text} \PY{o+ow}{in} \PY{n}{X\PYZus{}raw}\PY{p}{:}
+        \PY{c+c1}{\PYZsh{} A list of ngrams for the given document `text`}
+        \PY{n}{ngram\PYZus{}list} \PY{o}{=} \PY{n}{extract\PYZus{}ngrams}\PY{p}{(}\PY{n}{text}\PY{p}{,} \PY{n}{ngram\PYZus{}range}\PY{p}{,} \PY{n}{token\PYZus{}pattern}\PY{p}{,} \PY{n}{stop\PYZus{}words}\PY{p}{)}
+
+        \PY{c+c1}{\PYZsh{} Count document frequency}
+        \PY{n}{df}\PY{o}{.}\PY{n}{update}\PY{p}{(}\PY{n+nb}{set}\PY{p}{(}\PY{n}{ngram\PYZus{}list}\PY{p}{)}\PY{p}{)}
+
+        \PY{c+c1}{\PYZsh{} Count ngram frequency}
+        \PY{n}{ngram\PYZus{}counts}\PY{o}{.}\PY{n}{update}\PY{p}{(}\PY{n}{ngram} \PY{k}{for} \PY{n}{ngram} \PY{o+ow}{in} \PY{n}{ngram\PYZus{}list} \PY{k}{if} \PY{n}{df}\PY{p}{[}\PY{n}{ngram}\PY{p}{]} \PY{o}{\PYZgt{}}\PY{o}{=} \PY{n}{min\PYZus{}df}\PY{p}{)}
+
+    \PY{c+c1}{\PYZsh{} Extract ngram into vocab set}
+    \PY{n}{vocab} \PY{o}{=} \PY{p}{\PYZob{}}\PY{n}{ngram} \PY{k}{for} \PY{n}{ngram}\PY{p}{,} \PY{n}{\PYZus{}} \PY{o+ow}{in} \PY{n}{ngram\PYZus{}counts}\PY{o}{.}\PY{n}{most\PYZus{}common}\PY{p}{(}\PY{n}{keep\PYZus{}topN}\PY{p}{)}\PY{p}{\PYZcb{}}
+
+    \PY{k}{return} \PY{n}{vocab}\PY{p}{,} \PY{n}{df}\PY{p}{,} \PY{n}{ngram\PYZus{}counts}
+\end{Verbatim}
+\end{tcolorbox}
+
+    Now you should use \texttt{get\_vocab} to create your vocabulary and get
+document and raw frequencies of n-grams:
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{10}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{vocab}\PY{p}{,} \PY{n}{df}\PY{p}{,} \PY{n}{\PYZus{}} \PY{o}{=} \PY{n}{get\PYZus{}vocab}\PY{p}{(}\PY{n}{sentiment\PYZus{}train\PYZus{}texts}\PY{p}{,} \PY{n}{keep\PYZus{}topN}\PY{o}{=}\PY{l+m+mi}{5000}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{n+nb}{len}\PY{p}{(}\PY{n}{vocab}\PY{p}{)}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{n+nb}{list}\PY{p}{(}\PY{n}{vocab}\PY{p}{)}\PY{p}{[}\PY{p}{:}\PY{l+m+mi}{100}\PY{p}{]}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{n}{df}\PY{o}{.}\PY{n}{most\PYZus{}common}\PY{p}{(}\PY{p}{)}\PY{p}{[}\PY{p}{:}\PY{l+m+mi}{10}\PY{p}{]}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+5000
+
+['intriguing', 'takes', 'joy', 'approach', ('love', 'interest'), 'master',
+'marshall', 'annoying', 'crashes', 'wall', 'cindy', 'fails', 'intelligent',
+'outcome', ('thought', 'provoking'), 'ross', 'unfortunately', ('up', 'one'),
+'malcolm', 'smile', 'mistake', 'use', 'son', 'turn', 'rock', 'kennedy',
+'braveheart', 'legend', 'wear', 'fix', 'ms', 'status', 'members', 'residents',
+'led', 'added', 'kid', 'trash', 'carry', ('doesn', 'make'), 'wood', 'subplot',
+'combat', 'appeal', 'before', ('like', 'most'), 'portrayed', 'upset', 'switch',
+('real', 'life'), 'kill', ('geoffrey', 'rush'), 'park', 'effort', 'pacing',
+('ghost', 'dog'), ('american', 'pie'), 'betty', ('steve', 'buscemi'), 'natasha',
+'battles', ('no', 'one'), 'fish', ('tv', 'show'), ('film', 'however'), 'enter',
+'decade', 'opinion', 'everett', 'unusual', 'independence', 'aspect', 'starts',
+('would', 'make'), 'places', 'eager', 'under', 'tarzan', 'disguise', 'ruthless',
+'covering', 'realize', 'affection', 'jerry', ('about', 'how'), 'forest',
+'likable', 'white', 'emperor', 'influence', 'ridiculous', 'moves', 'surprised',
+'biggs', 'personally', ('not', 'say'), 'phoenix', 'rick', ('disney',
+'animated'), 'characterization']
+
+[('one', 1247), ('film', 1231), ('not', 1170), ('movie', 1095), ('out', 1080),
+('so', 1047), ('like', 1043), ('more', 1040), ('up', 1020), ('about', 1010)]
+    \end{Verbatim}
+
+    Then, you need to create vocabulary id -\textgreater{} word and word
+-\textgreater{} id dictionaries for reference:
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{11}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{vocab\PYZus{}id\PYZus{}to\PYZus{}word} \PY{o}{=} \PY{n+nb}{dict}\PY{p}{(}\PY{n+nb}{enumerate}\PY{p}{(}\PY{n}{vocab}\PY{p}{)}\PY{p}{)}
+
+\PY{n}{word\PYZus{}to\PYZus{}vocab\PYZus{}id} \PY{o}{=} \PY{p}{\PYZob{}}\PY{n}{v}\PY{p}{:} \PY{n}{k} \PY{k}{for} \PY{n}{k}\PY{p}{,} \PY{n}{v} \PY{o+ow}{in} \PY{n}{vocab\PYZus{}id\PYZus{}to\PYZus{}word}\PY{o}{.}\PY{n}{items}\PY{p}{(}\PY{p}{)}\PY{p}{\PYZcb{}}
+\end{Verbatim}
+\end{tcolorbox}
+
+    Now you should be able to extract n-grams for each text in the training,
+development and test sets:
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{12}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{sentiment\PYZus{}train\PYZus{}texts\PYZus{}ngrams} \PY{o}{=} \PY{p}{(}\PY{n}{extract\PYZus{}ngrams}\PY{p}{(}\PY{n}{text}\PY{p}{,} \PY{n}{vocab}\PY{o}{=}\PY{n}{vocab}\PY{p}{)}
+                                \PY{k}{for} \PY{n}{text} \PY{o+ow}{in} \PY{n}{sentiment\PYZus{}train\PYZus{}texts}\PY{p}{)}
+
+\PY{n}{sentiment\PYZus{}dev\PYZus{}texts\PYZus{}ngrams} \PY{o}{=} \PY{p}{(}\PY{n}{extract\PYZus{}ngrams}\PY{p}{(}\PY{n}{text}\PY{p}{,} \PY{n}{vocab}\PY{o}{=}\PY{n}{vocab}\PY{p}{)}
+                              \PY{k}{for} \PY{n}{text} \PY{o+ow}{in} \PY{n}{sentiment\PYZus{}dev\PYZus{}texts}\PY{p}{)}
+
+\PY{n}{sentiment\PYZus{}test\PYZus{}texts\PYZus{}ngrams} \PY{o}{=} \PY{p}{(}\PY{n}{extract\PYZus{}ngrams}\PY{p}{(}\PY{n}{text}\PY{p}{,} \PY{n}{vocab}\PY{o}{=}\PY{n}{vocab}\PY{p}{)}
+                               \PY{k}{for} \PY{n}{text} \PY{o+ow}{in} \PY{n}{sentiment\PYZus{}test\PYZus{}texts}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \hypertarget{vectorise-documents}{%
+\subsection{Vectorise documents}\label{vectorise-documents}}
+
+Next, write a function \texttt{vectoriser} to obtain Bag-of-ngram
+representations for a list of documents. The function should take as
+input: - \texttt{X\_ngram}: a list of texts (documents), where each text
+is represented as list of n-grams in the \texttt{vocab} -
+\texttt{vocab}: a set of n-grams to be used for representing the
+documents
+
+and return: - \texttt{X\_vec}: an array with dimensionality
+Nx\textbar vocab\textbar{} where N is the number of documents and
+\textbar vocab\textbar{} is the size of the vocabulary. Each element of
+the array should represent the frequency of a given n-gram in a
+document.
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{13}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{k}{def} \PY{n+nf}{vectorise}\PY{p}{(}\PY{n}{X\PYZus{}ngram}\PY{p}{,} \PY{n}{vocab}\PY{p}{)}\PY{p}{:}
+    \PY{n}{X\PYZus{}vec} \PY{o}{=} \PY{p}{[}\PY{p}{]}
+
+    \PY{k}{for} \PY{n}{ngram\PYZus{}list} \PY{o+ow}{in} \PY{n}{X\PYZus{}ngram}\PY{p}{:}
+        \PY{n}{counter} \PY{o}{=} \PY{n}{Counter}\PY{p}{(}\PY{n}{ngram\PYZus{}list}\PY{p}{)}
+        \PY{n}{X\PYZus{}vec}\PY{o}{.}\PY{n}{append}\PY{p}{(}\PY{p}{[}\PY{n}{counter}\PY{p}{[}\PY{n}{v}\PY{p}{]} \PY{k}{for} \PY{n}{v} \PY{o+ow}{in} \PY{n}{vocab}\PY{p}{]}\PY{p}{)}
+
+    \PY{k}{return} \PY{n}{np}\PY{o}{.}\PY{n}{array}\PY{p}{(}\PY{n}{X\PYZus{}vec}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    Finally, use \texttt{vectorise} to obtain document vectors for each
+document in the train, development and test set. You should extract both
+count and tf.idf vectors respectively:
+
+\hypertarget{count-vectors}{%
+\subsubsection{Count vectors}\label{count-vectors}}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{14}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{sentiment\PYZus{}train\PYZus{}count} \PY{o}{=} \PY{n}{vectorise}\PY{p}{(}\PY{n}{sentiment\PYZus{}train\PYZus{}texts\PYZus{}ngrams}\PY{p}{,} \PY{n}{vocab}\PY{p}{)}
+
+\PY{n}{sentiment\PYZus{}dev\PYZus{}count} \PY{o}{=} \PY{n}{vectorise}\PY{p}{(}\PY{n}{sentiment\PYZus{}dev\PYZus{}texts\PYZus{}ngrams}\PY{p}{,} \PY{n}{vocab}\PY{p}{)}
+
+\PY{n}{sentiment\PYZus{}test\PYZus{}count} \PY{o}{=} \PY{n}{vectorise}\PY{p}{(}\PY{n}{sentiment\PYZus{}test\PYZus{}texts\PYZus{}ngrams}\PY{p}{,} \PY{n}{vocab}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{15}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{sentiment\PYZus{}train\PYZus{}count}\PY{o}{.}\PY{n}{shape}
+\end{Verbatim}
+\end{tcolorbox}
+
+            \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
+\prompt{Out}{outcolor}{15}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+(1400, 5000)
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{16}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{sentiment\PYZus{}train\PYZus{}count}\PY{p}{[}\PY{p}{:}\PY{l+m+mi}{2}\PY{p}{,}\PY{p}{:}\PY{l+m+mi}{50}\PY{p}{]}
+\end{Verbatim}
+\end{tcolorbox}
+
+            \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
+\prompt{Out}{outcolor}{16}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+array([[0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1,
+        0, 2, 1, 0, 0, 1, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        2, 0, 0, 0, 0, 0],
+       [0, 1, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 1]])
+\end{Verbatim}
+\end{tcolorbox}
+
+    \hypertarget{tf.idf-vectors}{%
+\subsubsection{TF.IDF vectors}\label{tf.idf-vectors}}
+
+First compute \texttt{idfs} an array containing inverted document
+frequencies (Note: its elements should correspond to your
+\texttt{vocab})
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{17}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{total\PYZus{}sentiment\PYZus{}train\PYZus{}docs} \PY{o}{=} \PY{n+nb}{len}\PY{p}{(}\PY{n}{sentiment\PYZus{}train\PYZus{}texts}\PY{p}{)}
+\PY{n}{total\PYZus{}sentiment\PYZus{}dev\PYZus{}docs} \PY{o}{=} \PY{n+nb}{len}\PY{p}{(}\PY{n}{sentiment\PYZus{}dev\PYZus{}texts}\PY{p}{)}
+\PY{n}{total\PYZus{}sentiment\PYZus{}test\PYZus{}docs} \PY{o}{=} \PY{n+nb}{len}\PY{p}{(}\PY{n}{sentiment\PYZus{}test\PYZus{}texts}\PY{p}{)}
+
+\PY{n}{\PYZus{}}\PY{p}{,} \PY{n}{sentiment\PYZus{}dev\PYZus{}df}\PY{p}{,} \PY{n}{\PYZus{}} \PY{o}{=} \PY{n}{get\PYZus{}vocab}\PY{p}{(}\PY{n}{sentiment\PYZus{}dev\PYZus{}texts}\PY{p}{,} \PY{n}{keep\PYZus{}topN}\PY{o}{=}\PY{l+m+mi}{5000}\PY{p}{)}
+
+\PY{n}{\PYZus{}}\PY{p}{,} \PY{n}{sentiment\PYZus{}test\PYZus{}df}\PY{p}{,} \PY{n}{\PYZus{}} \PY{o}{=} \PY{n}{get\PYZus{}vocab}\PY{p}{(}\PY{n}{sentiment\PYZus{}test\PYZus{}texts}\PY{p}{,} \PY{n}{keep\PYZus{}topN}\PY{o}{=}\PY{l+m+mi}{5000}\PY{p}{)}
+
+\PY{n}{sentiment\PYZus{}train\PYZus{}idf} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{array}\PY{p}{(}\PY{p}{[}
+    \PY{n}{np}\PY{o}{.}\PY{n}{log10}\PY{p}{(}\PY{n}{total\PYZus{}sentiment\PYZus{}train\PYZus{}docs} \PY{o}{/} \PY{n}{df}\PY{p}{[}\PY{n}{v}\PY{p}{]}\PY{p}{)} \PY{k}{for} \PY{n}{v} \PY{o+ow}{in} \PY{n}{vocab}\PY{p}{]}
+\PY{p}{)}
+
+\PY{n}{sentiment\PYZus{}dev\PYZus{}idf} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{array}\PY{p}{(}\PY{p}{[}
+    \PY{n}{np}\PY{o}{.}\PY{n}{log10}\PY{p}{(}\PY{n}{total\PYZus{}sentiment\PYZus{}dev\PYZus{}docs} \PY{o}{/} \PY{n}{sentiment\PYZus{}dev\PYZus{}df}\PY{p}{[}\PY{n}{v}\PY{p}{]}\PY{p}{)}
+    \PY{k}{if} \PY{n}{sentiment\PYZus{}dev\PYZus{}df}\PY{p}{[}\PY{n}{v}\PY{p}{]} \PY{k}{else} \PY{l+m+mi}{0} \PY{k}{for} \PY{n}{v} \PY{o+ow}{in} \PY{n}{vocab}
+\PY{p}{]}\PY{p}{)}
+
+\PY{n}{sentiment\PYZus{}test\PYZus{}idf} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{array}\PY{p}{(}\PY{p}{[}
+    \PY{n}{np}\PY{o}{.}\PY{n}{log10}\PY{p}{(}\PY{n}{total\PYZus{}sentiment\PYZus{}test\PYZus{}docs} \PY{o}{/} \PY{n}{sentiment\PYZus{}test\PYZus{}df}\PY{p}{[}\PY{n}{v}\PY{p}{]}\PY{p}{)}
+    \PY{k}{if} \PY{n}{sentiment\PYZus{}test\PYZus{}df}\PY{p}{[}\PY{n}{v}\PY{p}{]} \PY{k}{else} \PY{l+m+mi}{0} \PY{k}{for} \PY{n}{v} \PY{o+ow}{in} \PY{n}{vocab}
+\PY{p}{]}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    Then transform your count vectors to TF.IDF vectors:
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{18}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{c+c1}{\PYZsh{} Use the \PYZdq{}log normalisation\PYZdq{} variant to scale TF for better results}
+\PY{n}{sentiment\PYZus{}train\PYZus{}tfidf} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{log10}\PY{p}{(}\PY{l+m+mi}{1} \PY{o}{+} \PY{n}{sentiment\PYZus{}train\PYZus{}count}\PY{p}{)} \PY{o}{*} \PY{n}{sentiment\PYZus{}train\PYZus{}idf}
+
+\PY{n}{sentiment\PYZus{}dev\PYZus{}tfidf} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{log10}\PY{p}{(}\PY{l+m+mi}{1} \PY{o}{+} \PY{n}{sentiment\PYZus{}dev\PYZus{}count}\PY{p}{)} \PY{o}{*} \PY{n}{sentiment\PYZus{}dev\PYZus{}idf}
+
+\PY{n}{sentiment\PYZus{}test\PYZus{}tfidf} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{log10}\PY{p}{(}\PY{l+m+mi}{1} \PY{o}{+} \PY{n}{sentiment\PYZus{}test\PYZus{}count}\PY{p}{)} \PY{o}{*} \PY{n}{sentiment\PYZus{}test\PYZus{}idf}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{19}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{sentiment\PYZus{}train\PYZus{}tfidf}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{,} \PY{p}{:}\PY{l+m+mi}{50}\PY{p}{]}
+\end{Verbatim}
+\end{tcolorbox}
+
+            \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
+\prompt{Out}{outcolor}{19}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+array([0.        , 0.17014307, 0.        , 0.58796329, 0.        ,
+       0.        , 0.        , 0.        , 0.        , 0.        ,
+       0.        , 0.        , 0.        , 0.        , 0.        ,
+       0.        , 0.        , 0.        , 0.        , 0.        ,
+       0.        , 0.        , 0.        , 0.        , 0.        ,
+       0.        , 0.        , 0.        , 0.        , 0.        ,
+       0.        , 0.        , 0.        , 0.        , 0.        ,
+       0.        , 0.        , 0.        , 0.        , 0.        ,
+       0.        , 0.        , 0.        , 0.        , 0.        ,
+       0.        , 0.        , 0.        , 0.        , 0.38979462])
+\end{Verbatim}
+\end{tcolorbox}
+
+    \hypertarget{binary-logistic-regression}{%
+\section{Binary Logistic Regression}\label{binary-logistic-regression}}
+
+After obtaining vector representations of the data, now you are ready to
+implement Binary Logistic Regression for classifying sentiment.
+
+First, you need to implement the \texttt{sigmoid} function. It takes as
+input:
+
+\begin{itemize}
+\tightlist
+\item
+  \texttt{z}: a real number or an array of real numbers
+\end{itemize}
+
+and returns:
+
+\begin{itemize}
+\tightlist
+\item
+  \texttt{sig}: the sigmoid of \texttt{z}
+\end{itemize}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{20}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{k}{def} \PY{n+nf}{sigmoid}\PY{p}{(}\PY{n}{z}\PY{p}{)}\PY{p}{:}
+    \PY{k}{return} \PY{l+m+mi}{1} \PY{o}{/} \PY{p}{(}\PY{l+m+mi}{1} \PY{o}{+} \PY{n}{np}\PY{o}{.}\PY{n}{exp}\PY{p}{(}\PY{o}{\PYZhy{}}\PY{n}{z}\PY{p}{)}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{21}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n+nb}{print}\PY{p}{(}\PY{n}{sigmoid}\PY{p}{(}\PY{l+m+mi}{0}\PY{p}{)}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{n}{sigmoid}\PY{p}{(}\PY{n}{np}\PY{o}{.}\PY{n}{array}\PY{p}{(}\PY{p}{[}\PY{o}{\PYZhy{}}\PY{l+m+mf}{5.}\PY{p}{,} \PY{l+m+mf}{1.2}\PY{p}{]}\PY{p}{)}\PY{p}{)}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+0.5
+[0.00669285 0.76852478]
+    \end{Verbatim}
+
+    Then, implement the \texttt{predict\_proba} function to obtain
+prediction probabilities. It takes as input:
+
+\begin{itemize}
+\tightlist
+\item
+  \texttt{X}: an array of inputs, i.e.~documents represented by
+  bag-of-ngram vectors (\(N \times |vocab|\))
+\item
+  \texttt{weights}: a 1-D array of the model's weights \((1, |vocab|)\)
+\end{itemize}
+
+and returns:
+
+\begin{itemize}
+\tightlist
+\item
+  \texttt{preds\_proba}: the prediction probabilities of X given the
+  weights
+\end{itemize}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{22}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{k}{def} \PY{n+nf}{predict\PYZus{}proba}\PY{p}{(}\PY{n}{X}\PY{p}{,} \PY{n}{weights}\PY{p}{)}\PY{p}{:}
+    \PY{n}{z} \PY{o}{=} \PY{n}{X}\PY{o}{.}\PY{n}{dot}\PY{p}{(}\PY{n}{weights}\PY{p}{)}
+
+    \PY{k}{return} \PY{n}{sigmoid}\PY{p}{(}\PY{n}{z}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    Then, implement the \texttt{predict\_class} function to obtain the most
+probable class for each vector in an array of input vectors. It takes as
+input:
+
+\begin{itemize}
+\tightlist
+\item
+  \texttt{X}: an array of documents represented by bag-of-ngram vectors
+  (\(N \times |vocab|\))
+\item
+  \texttt{weights}: a 1-D array of the model's weights \((1, |vocab|)\)
+\end{itemize}
+
+and returns:
+
+\begin{itemize}
+\tightlist
+\item
+  \texttt{preds\_class}: the predicted class for each x in X given the
+  weights
+\end{itemize}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{23}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{k}{def} \PY{n+nf}{predict\PYZus{}class}\PY{p}{(}\PY{n}{X}\PY{p}{,} \PY{n}{weights}\PY{p}{)}\PY{p}{:}
+    \PY{k}{return} \PY{p}{[}\PY{l+m+mi}{0} \PY{k}{if} \PY{n}{prob} \PY{o}{\PYZlt{}} \PY{l+m+mf}{0.5} \PY{k}{else} \PY{l+m+mi}{1} \PY{k}{for} \PY{n}{prob} \PY{o+ow}{in} \PY{n}{predict\PYZus{}proba}\PY{p}{(}\PY{n}{X}\PY{p}{,} \PY{n}{weights}\PY{p}{)}\PY{p}{]}
+\end{Verbatim}
+\end{tcolorbox}
+
+    To learn the weights from data, we need to minimise the binary
+cross-entropy loss. Implement \texttt{binary\_loss} that takes as input:
+
+\begin{itemize}
+\tightlist
+\item
+  \texttt{X}: input vectors
+\item
+  \texttt{Y}: labels
+\item
+  \texttt{weights}: model weights
+\item
+  \texttt{alpha}: regularisation strength
+\end{itemize}
+
+and return:
+
+\begin{itemize}
+\tightlist
+\item
+  \texttt{l}: the loss score
+\end{itemize}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{24}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{k}{def} \PY{n+nf}{binary\PYZus{}loss}\PY{p}{(}\PY{n}{X}\PY{p}{,} \PY{n}{Y}\PY{p}{,} \PY{n}{weights}\PY{p}{,} \PY{n}{alpha}\PY{o}{=}\PY{l+m+mf}{0.00001}\PY{p}{)}\PY{p}{:}
+    \PY{n}{predicted\PYZus{}probabilities} \PY{o}{=} \PY{n}{predict\PYZus{}proba}\PY{p}{(}\PY{n}{X}\PY{p}{,} \PY{n}{weights}\PY{p}{)}
+
+    \PY{n}{l} \PY{o}{=} \PY{o}{\PYZhy{}}\PY{n}{Y} \PY{o}{*} \PY{n}{np}\PY{o}{.}\PY{n}{log}\PY{p}{(}\PY{n}{predicted\PYZus{}probabilities}\PY{p}{)} \PY{o}{\PYZhy{}} \PY{p}{(}\PY{l+m+mi}{1} \PY{o}{\PYZhy{}} \PY{n}{Y}\PY{p}{)} \PY{o}{*} \PY{n}{np}\PY{o}{.}\PY{n}{log}\PY{p}{(}\PY{l+m+mi}{1} \PY{o}{\PYZhy{}} \PY{n}{predicted\PYZus{}probabilities}\PY{p}{)}
+
+    \PY{c+c1}{\PYZsh{} L2 Regularisation}
+    \PY{n}{l} \PY{o}{+}\PY{o}{=} \PY{n}{alpha} \PY{o}{*} \PY{n}{weights}\PY{o}{.}\PY{n}{dot}\PY{p}{(}\PY{n}{weights}\PY{p}{)}
+
+    \PY{c+c1}{\PYZsh{} Return the average loss}
+    \PY{k}{return} \PY{n}{np}\PY{o}{.}\PY{n}{mean}\PY{p}{(}\PY{n}{l}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    Now, you can implement Stochastic Gradient Descent to learn the weights
+of your sentiment classifier. The \texttt{SGD} function takes as input:
+
+\begin{itemize}
+\tightlist
+\item
+  \texttt{X\_tr}: array of training data (vectors)
+\item
+  \texttt{Y\_tr}: labels of \texttt{X\_tr}
+\item
+  \texttt{X\_dev}: array of development (i.e.~validation) data (vectors)
+\item
+  \texttt{Y\_dev}: labels of \texttt{X\_dev}
+\item
+  \texttt{lr}: learning rate
+\item
+  \texttt{alpha}: regularisation strength
+\item
+  \texttt{epochs}: number of full passes over the training data
+\item
+  \texttt{tolerance}: stop training if the difference between the
+  current and previous validation loss is smaller than a threshold
+\item
+  \texttt{print\_progress}: flag for printing the training progress
+  (train/validation loss)
+\end{itemize}
+
+and returns:
+
+\begin{itemize}
+\tightlist
+\item
+  \texttt{weights}: the weights learned
+\item
+  \texttt{training\_loss\_history}: an array with the average losses of
+  the whole training set after each epoch
+\item
+  \texttt{validation\_loss\_history}: an array with the average losses
+  of the whole development set after each epoch
+\end{itemize}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{25}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{k}{def} \PY{n+nf}{SGD}\PY{p}{(}\PY{n}{X\PYZus{}tr}\PY{p}{,} \PY{n}{Y\PYZus{}tr}\PY{p}{,} \PY{n}{X\PYZus{}dev}\PY{p}{,} \PY{n}{Y\PYZus{}dev}\PY{p}{,} \PY{n}{lr}\PY{o}{=}\PY{l+m+mf}{0.1}\PY{p}{,} \PY{n}{alpha}\PY{o}{=}\PY{l+m+mf}{0.00001}\PY{p}{,} \PY{n}{epochs}\PY{o}{=}\PY{l+m+mi}{5}\PY{p}{,} \PY{n}{tolerance}\PY{o}{=}\PY{l+m+mf}{0.0001}\PY{p}{,} \PY{n}{print\PYZus{}progress}\PY{o}{=}\PY{k+kc}{True}\PY{p}{)}\PY{p}{:}
+    \PY{c+c1}{\PYZsh{} fixing random seed for reproducibility}
+    \PY{n}{np}\PY{o}{.}\PY{n}{random}\PY{o}{.}\PY{n}{seed}\PY{p}{(}\PY{l+m+mi}{123}\PY{p}{)}
+    \PY{n}{training\PYZus{}loss\PYZus{}history} \PY{o}{=} \PY{p}{[}\PY{p}{]}
+    \PY{n}{validation\PYZus{}loss\PYZus{}history} \PY{o}{=} \PY{p}{[}\PY{p}{]}
+
+    \PY{c+c1}{\PYZsh{} Initialise weight to zero}
+    \PY{n}{weights} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{zeros}\PY{p}{(}\PY{n}{X\PYZus{}tr}\PY{o}{.}\PY{n}{shape}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{)}
+
+    \PY{c+c1}{\PYZsh{} Create training tuples}
+    \PY{n}{train\PYZus{}docs} \PY{o}{=} \PY{n+nb}{list}\PY{p}{(}\PY{n+nb}{zip}\PY{p}{(}\PY{n}{X\PYZus{}tr}\PY{p}{,} \PY{n}{Y\PYZus{}tr}\PY{p}{)}\PY{p}{)}
+
+    \PY{k}{for} \PY{n}{epoch} \PY{o+ow}{in} \PY{n+nb}{range}\PY{p}{(}\PY{n}{epochs}\PY{p}{)}\PY{p}{:}
+        \PY{c+c1}{\PYZsh{} Randomise order in train\PYZus{}docs}
+        \PY{n}{np}\PY{o}{.}\PY{n}{random}\PY{o}{.}\PY{n}{shuffle}\PY{p}{(}\PY{n}{train\PYZus{}docs}\PY{p}{)}
+
+        \PY{k}{for} \PY{n}{x\PYZus{}i}\PY{p}{,} \PY{n}{y\PYZus{}i} \PY{o+ow}{in} \PY{n}{train\PYZus{}docs}\PY{p}{:}
+            \PY{n}{weights} \PY{o}{\PYZhy{}}\PY{o}{=} \PY{n}{lr} \PY{o}{*} \PY{p}{(}\PY{n}{x\PYZus{}i} \PY{o}{*} \PY{p}{(}\PY{n}{predict\PYZus{}proba}\PY{p}{(}\PY{n}{x\PYZus{}i}\PY{p}{,} \PY{n}{weights}\PY{p}{)} \PY{o}{\PYZhy{}} \PY{n}{y\PYZus{}i}\PY{p}{)} \PY{o}{+} \PY{l+m+mi}{2} \PY{o}{*} \PY{n}{alpha} \PY{o}{*} \PY{n}{weights}\PY{p}{)}
+
+        \PY{c+c1}{\PYZsh{} Monitor training and validation loss}
+        \PY{n}{cur\PYZus{}loss\PYZus{}tr} \PY{o}{=} \PY{n}{binary\PYZus{}loss}\PY{p}{(}\PY{n}{X\PYZus{}tr}\PY{p}{,} \PY{n}{Y\PYZus{}tr}\PY{p}{,} \PY{n}{weights}\PY{p}{,} \PY{n}{alpha}\PY{p}{)}
+        \PY{n}{cur\PYZus{}loss\PYZus{}dev} \PY{o}{=} \PY{n}{binary\PYZus{}loss}\PY{p}{(}\PY{n}{X\PYZus{}dev}\PY{p}{,} \PY{n}{Y\PYZus{}dev}\PY{p}{,} \PY{n}{weights}\PY{p}{,} \PY{n}{alpha}\PY{p}{)}
+
+        \PY{c+c1}{\PYZsh{} Early stopping}
+        \PY{k}{if} \PY{n}{epoch} \PY{o}{\PYZgt{}} \PY{l+m+mi}{0} \PY{o+ow}{and} \PY{n}{validation\PYZus{}loss\PYZus{}history}\PY{p}{[}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{]} \PY{o}{\PYZhy{}} \PY{n}{cur\PYZus{}loss\PYZus{}dev} \PY{o}{\PYZlt{}} \PY{n}{tolerance}\PY{p}{:}
+            \PY{k}{break}
+        \PY{k}{else}\PY{p}{:}
+            \PY{n}{training\PYZus{}loss\PYZus{}history}\PY{o}{.}\PY{n}{append}\PY{p}{(}\PY{n}{cur\PYZus{}loss\PYZus{}tr}\PY{p}{)}
+            \PY{n}{validation\PYZus{}loss\PYZus{}history}\PY{o}{.}\PY{n}{append}\PY{p}{(}\PY{n}{cur\PYZus{}loss\PYZus{}dev}\PY{p}{)}
+
+        \PY{k}{if} \PY{n}{print\PYZus{}progress}\PY{p}{:}
+            \PY{n+nb}{print}\PY{p}{(}\PY{l+s+sa}{f}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Epoch: }\PY{l+s+si}{\PYZob{}epoch\PYZcb{}}\PY{l+s+s1}{ | Training loss: }\PY{l+s+si}{\PYZob{}cur\PYZus{}loss\PYZus{}tr\PYZcb{}}\PY{l+s+s1}{ | Validation loss: }\PY{l+s+si}{\PYZob{}cur\PYZus{}loss\PYZus{}dev\PYZcb{}}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+
+    \PY{k}{return} \PY{n}{weights}\PY{p}{,} \PY{n}{training\PYZus{}loss\PYZus{}history}\PY{p}{,} \PY{n}{validation\PYZus{}loss\PYZus{}history}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \hypertarget{train-and-evaluate-binary-logistic-regression-with-count-vectors}{%
+\subsection{Train and Evaluate Binary Logistic Regression with Count
+Vectors}\label{train-and-evaluate-binary-logistic-regression-with-count-vectors}}
+
+First train the model using SGD:
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{26}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{w\PYZus{}count}\PY{p}{,} \PY{n}{tr\PYZus{}loss\PYZus{}count}\PY{p}{,} \PY{n}{dev\PYZus{}loss\PYZus{}count} \PY{o}{=} \PY{n}{SGD}\PY{p}{(}\PY{n}{X\PYZus{}tr}\PY{o}{=}\PY{n}{sentiment\PYZus{}train\PYZus{}count}\PY{p}{,}
+                                             \PY{n}{Y\PYZus{}tr}\PY{o}{=}\PY{n}{sentiment\PYZus{}train\PYZus{}labels}\PY{p}{,}
+                                             \PY{n}{X\PYZus{}dev}\PY{o}{=}\PY{n}{sentiment\PYZus{}dev\PYZus{}count}\PY{p}{,}
+                                             \PY{n}{Y\PYZus{}dev}\PY{o}{=}\PY{n}{sentiment\PYZus{}dev\PYZus{}labels}\PY{p}{,}
+                                             \PY{n}{lr}\PY{o}{=}\PY{l+m+mf}{0.00010125}\PY{p}{,}
+                                             \PY{n}{alpha}\PY{o}{=}\PY{l+m+mf}{0.00001}\PY{p}{,}
+                                             \PY{n}{epochs}\PY{o}{=}\PY{l+m+mi}{100}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+Epoch: 0 | Training loss: 0.6348491121448473 | Validation loss:
+0.6487531390444826
+Epoch: 1 | Training loss: 0.5938450068965224 | Validation loss:
+0.6197582795219723
+Epoch: 2 | Training loss: 0.5620854544884649 | Validation loss:
+0.5968170578825471
+Epoch: 3 | Training loss: 0.5361249484005611 | Validation loss:
+0.5793664064778387
+Epoch: 4 | Training loss: 0.5135391035412232 | Validation loss:
+0.5651486900885704
+Epoch: 5 | Training loss: 0.4944097063594531 | Validation loss:
+0.5530542328543285
+Epoch: 6 | Training loss: 0.47777782565211835 | Validation loss:
+0.5421463814864184
+Epoch: 7 | Training loss: 0.4629537317844918 | Validation loss:
+0.5337658704752338
+Epoch: 8 | Training loss: 0.44909198060596117 | Validation loss:
+0.524853646854113
+Epoch: 9 | Training loss: 0.43698328849816304 | Validation loss:
+0.5178529834051904
+Epoch: 10 | Training loss: 0.4268767904066057 | Validation loss:
+0.5126123829317655
+Epoch: 11 | Training loss: 0.415327339357736 | Validation loss:
+0.5051367678530422
+Epoch: 12 | Training loss: 0.40574825257612784 | Validation loss:
+0.4996577482206154
+Epoch: 13 | Training loss: 0.3970878383242511 | Validation loss:
+0.49497890847676357
+Epoch: 14 | Training loss: 0.38847130589319934 | Validation loss:
+0.48998285716710294
+Epoch: 15 | Training loss: 0.38065774446983647 | Validation loss:
+0.4857537341398981
+Epoch: 16 | Training loss: 0.3733286662058011 | Validation loss:
+0.4817831032743908
+Epoch: 17 | Training loss: 0.36640080825803695 | Validation loss:
+0.47809200298562227
+Epoch: 18 | Training loss: 0.35969276849468856 | Validation loss:
+0.4745888425124926
+Epoch: 19 | Training loss: 0.35334012075496424 | Validation loss:
+0.47123659047228367
+Epoch: 20 | Training loss: 0.34733703152569073 | Validation loss:
+0.46816651673004733
+Epoch: 21 | Training loss: 0.34167211059250135 | Validation loss:
+0.46528014673936513
+Epoch: 22 | Training loss: 0.3362195001185412 | Validation loss:
+0.4625892470955499
+Epoch: 23 | Training loss: 0.33095179614791903 | Validation loss:
+0.46012478881753893
+Epoch: 24 | Training loss: 0.32650708983912746 | Validation loss:
+0.4579428962591525
+Epoch: 25 | Training loss: 0.3211028306046971 | Validation loss:
+0.4552760984585332
+Epoch: 26 | Training loss: 0.31654750702040424 | Validation loss:
+0.45306712877174127
+Epoch: 27 | Training loss: 0.312015361771976 | Validation loss:
+0.4509747299632235
+Epoch: 28 | Training loss: 0.3076887319931734 | Validation loss:
+0.4490403924821534
+Epoch: 29 | Training loss: 0.3039093419401146 | Validation loss:
+0.4472280056450636
+Epoch: 30 | Training loss: 0.2995395844211085 | Validation loss:
+0.4453148645067177
+Epoch: 31 | Training loss: 0.29573317784795 | Validation loss:
+0.44386828719712573
+Epoch: 32 | Training loss: 0.2921708698160229 | Validation loss:
+0.44198939800179354
+Epoch: 33 | Training loss: 0.28829790994666327 | Validation loss:
+0.44048633205035137
+Epoch: 34 | Training loss: 0.28477122581429 | Validation loss:
+0.43893887830745276
+Epoch: 35 | Training loss: 0.2813658380059035 | Validation loss:
+0.4374359359566886
+Epoch: 36 | Training loss: 0.27804678298040575 | Validation loss:
+0.43617551742377203
+Epoch: 37 | Training loss: 0.27484227593281546 | Validation loss:
+0.4347247346740696
+Epoch: 38 | Training loss: 0.27171949851624194 | Validation loss:
+0.4334573867676779
+Epoch: 39 | Training loss: 0.26866912938326754 | Validation loss:
+0.43242194687930097
+Epoch: 40 | Training loss: 0.2657104286054315 | Validation loss:
+0.4312340184595881
+Epoch: 41 | Training loss: 0.26284630467863773 | Validation loss:
+0.4301578948482491
+Epoch: 42 | Training loss: 0.26002913569628816 | Validation loss:
+0.4290570879960602
+Epoch: 43 | Training loss: 0.25731310889704495 | Validation loss:
+0.42809850840045827
+Epoch: 44 | Training loss: 0.2546066277037061 | Validation loss:
+0.4268009607842734
+Epoch: 45 | Training loss: 0.25202093586088054 | Validation loss:
+0.4257832862071676
+Epoch: 46 | Training loss: 0.24949873081679186 | Validation loss:
+0.4248182248138471
+Epoch: 47 | Training loss: 0.24698964095246684 | Validation loss:
+0.4239674501513761
+Epoch: 48 | Training loss: 0.24462378930044215 | Validation loss:
+0.4234985897262857
+Epoch: 49 | Training loss: 0.24231850098052518 | Validation loss:
+0.42283426101689014
+Epoch: 50 | Training loss: 0.2399631129749179 | Validation loss:
+0.421937689712641
+Epoch: 51 | Training loss: 0.23767256317155463 | Validation loss:
+0.42106861049426153
+Epoch: 52 | Training loss: 0.2354274868915685 | Validation loss:
+0.4202215970444573
+Epoch: 53 | Training loss: 0.23323036147074216 | Validation loss:
+0.4193007022577362
+Epoch: 54 | Training loss: 0.2312014543730451 | Validation loss:
+0.41896773779759333
+Epoch: 55 | Training loss: 0.22917832447987851 | Validation loss:
+0.4184506133055368
+Epoch: 56 | Training loss: 0.2269980450347653 | Validation loss:
+0.4172615783949513
+Epoch: 57 | Training loss: 0.22501347429942678 | Validation loss:
+0.41652285158598934
+Epoch: 58 | Training loss: 0.22307270003274182 | Validation loss:
+0.41586072138197033
+Epoch: 59 | Training loss: 0.22114427884882393 | Validation loss:
+0.4154833985173573
+Epoch: 60 | Training loss: 0.2192632850710794 | Validation loss:
+0.41472423182563894
+Epoch: 61 | Training loss: 0.21741912032308436 | Validation loss:
+0.41432824354308295
+Epoch: 62 | Training loss: 0.21560982676635426 | Validation loss:
+0.4136514396624679
+Epoch: 63 | Training loss: 0.2138507076100004 | Validation loss:
+0.41333676060181973
+Epoch: 64 | Training loss: 0.21219177587216295 | Validation loss:
+0.4131050913585577
+Epoch: 65 | Training loss: 0.2105102718382752 | Validation loss:
+0.4126888568186969
+Epoch: 66 | Training loss: 0.2087267997075758 | Validation loss:
+0.4115138164905966
+Epoch: 67 | Training loss: 0.20710962112680567 | Validation loss:
+0.4110059523416183
+Epoch: 68 | Training loss: 0.20543410512716792 | Validation loss:
+0.41068011656846254
+Epoch: 69 | Training loss: 0.20383862345720868 | Validation loss:
+0.41029912125456164
+Epoch: 70 | Training loss: 0.20235162588711555 | Validation loss:
+0.40962921939878555
+    \end{Verbatim}
+
+    Now plot the training and validation history per epoch. Does your model
+underfit, overfit or is it about right? Explain why.
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{27}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{plt}\PY{o}{.}\PY{n}{plot}\PY{p}{(}\PY{n}{tr\PYZus{}loss\PYZus{}count}\PY{p}{,} \PY{n}{label}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Training loss}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{plot}\PY{p}{(}\PY{n}{dev\PYZus{}loss\PYZus{}count}\PY{p}{,} \PY{n}{label}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Validation loss}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+
+\PY{n}{plt}\PY{o}{.}\PY{n}{xlabel}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Epochs}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{ylabel}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Loss}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+
+\PY{n}{plt}\PY{o}{.}\PY{n}{title}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Training Monitoring (Binary \PYZhy{} Count)}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+
+\PY{n}{plt}\PY{o}{.}\PY{n}{legend}\PY{p}{(}\PY{p}{)}
+
+\PY{n}{plt}\PY{o}{.}\PY{n}{show}\PY{p}{(}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_48_0.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+
+    According to the plot \textbf{Training Monitoring (Binary - Count)},
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  The training loss decreases as epoch increases and eventually reaches
+  a point of stability
+\item
+  The validation loss decreases as epoch increases and eventually
+  reaches a point of stability
+\item
+  There exists a ``generalisation gap'' between validation and training
+  loss
+\end{enumerate}
+
+The following techniques are implemented in the Stochastic Gradient
+Descent algorithm to avoid overfitting of the training data:
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  Early stopping
+\item
+  L2 regularisation
+\end{enumerate}
+
+Hence, the model is \textbf{about right}.
+
+    Compute accuracy, precision, recall and F1-scores:
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{28}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{args} \PY{o}{=} \PY{n}{sentiment\PYZus{}test\PYZus{}labels}\PY{p}{,} \PY{n}{predict\PYZus{}class}\PY{p}{(}\PY{n}{sentiment\PYZus{}test\PYZus{}count}\PY{p}{,} \PY{n}{w\PYZus{}count}\PY{p}{)}
+
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Accuracy:}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{accuracy\PYZus{}score}\PY{p}{(}\PY{o}{*}\PY{n}{args}\PY{p}{)}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Precision:}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{precision\PYZus{}score}\PY{p}{(}\PY{o}{*}\PY{n}{args}\PY{p}{)}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Recall:}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{recall\PYZus{}score}\PY{p}{(}\PY{o}{*}\PY{n}{args}\PY{p}{)}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{F1\PYZhy{}Score:}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{f1\PYZus{}score}\PY{p}{(}\PY{o}{*}\PY{n}{args}\PY{p}{)}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+Accuracy: 0.8625
+Precision: 0.8536585365853658
+Recall: 0.875
+F1-Score: 0.8641975308641976
+    \end{Verbatim}
+
+    Finally, print the top-10 words for the negative and positive class
+respectively.
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{29}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{top10\PYZus{}positive\PYZus{}ids} \PY{o}{=} \PY{p}{(}\PY{o}{\PYZhy{}}\PY{n}{w\PYZus{}count}\PY{p}{)}\PY{o}{.}\PY{n}{argsort}\PY{p}{(}\PY{p}{)}\PY{p}{[}\PY{p}{:}\PY{l+m+mi}{10}\PY{p}{]}
+\PY{n}{top10\PYZus{}negative\PYZus{}ids} \PY{o}{=} \PY{n}{w\PYZus{}count}\PY{o}{.}\PY{n}{argsort}\PY{p}{(}\PY{p}{)}\PY{p}{[}\PY{p}{:}\PY{l+m+mi}{10}\PY{p}{]}
+
+\PY{n+nb}{print}\PY{p}{(}
+    \PY{l+s+sa}{f}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Top 10 positive: }\PY{l+s+s1}{\PYZob{}}\PY{l+s+s1}{[vocab\PYZus{}id\PYZus{}to\PYZus{}word[id] for id in top10\PYZus{}positive\PYZus{}ids]\PYZcb{} }\PY{l+s+se}{\PYZbs{}n}\PY{l+s+s1}{\PYZsq{}}
+\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}
+    \PY{l+s+sa}{f}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Top 10 negative: }\PY{l+s+s1}{\PYZob{}}\PY{l+s+s1}{[vocab\PYZus{}id\PYZus{}to\PYZus{}word[id] for id in top10\PYZus{}negative\PYZus{}ids]\PYZcb{}}\PY{l+s+s1}{\PYZsq{}}
+\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+Top 10 positive: ['great', 'well', 'seen', 'fun', 'life', 'movies', 'world',
+'many', 'quite', 'see']
+
+Top 10 negative: ['bad', 'worst', 'unfortunately', 'why', 'nothing', 'script',
+'boring', 'plot', 'supposed', 'looks']
+    \end{Verbatim}
+
+    \hypertarget{features-evaluation}{%
+\subsubsection{Features Evaluation}\label{features-evaluation}}
+
+The top 10 features obtained for each class using \textbf{count vectors}
+are reasonable.
+
+    \hypertarget{train-and-evaluate-binary-logistic-regression-with-tf.idf-vectors}{%
+\subsection{Train and Evaluate Binary Logistic Regression with TF.IDF
+Vectors}\label{train-and-evaluate-binary-logistic-regression-with-tf.idf-vectors}}
+
+Follow the same steps as above (i.e.~evaluating count n-gram
+representations).
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{30}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{w\PYZus{}tfidf}\PY{p}{,} \PY{n}{tr\PYZus{}loss\PYZus{}tfidf}\PY{p}{,} \PY{n}{dev\PYZus{}loss\PYZus{}tfidf} \PY{o}{=} \PY{n}{SGD}\PY{p}{(}\PY{n}{X\PYZus{}tr}\PY{o}{=}\PY{n}{sentiment\PYZus{}train\PYZus{}tfidf}\PY{p}{,}
+                                             \PY{n}{Y\PYZus{}tr}\PY{o}{=}\PY{n}{sentiment\PYZus{}train\PYZus{}labels}\PY{p}{,}
+                                             \PY{n}{X\PYZus{}dev}\PY{o}{=}\PY{n}{sentiment\PYZus{}dev\PYZus{}tfidf}\PY{p}{,}
+                                             \PY{n}{Y\PYZus{}dev}\PY{o}{=}\PY{n}{sentiment\PYZus{}dev\PYZus{}labels}\PY{p}{,}
+                                             \PY{n}{lr}\PY{o}{=}\PY{l+m+mf}{0.00322}\PY{p}{,}
+                                             \PY{n}{alpha}\PY{o}{=}\PY{l+m+mf}{0.0005}\PY{p}{,}
+                                             \PY{n}{epochs}\PY{o}{=}\PY{l+m+mi}{100}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+Epoch: 0 | Training loss: 0.6125588594833006 | Validation loss:
+0.647706528804582
+Epoch: 1 | Training loss: 0.5530253406900361 | Validation loss:
+0.6150800703145565
+Epoch: 2 | Training loss: 0.5069409022845992 | Validation loss:
+0.5894863184098205
+Epoch: 3 | Training loss: 0.47004008441871326 | Validation loss:
+0.5694136509002529
+Epoch: 4 | Training loss: 0.43976084989704306 | Validation loss:
+0.5532699411696317
+Epoch: 5 | Training loss: 0.41423882254708605 | Validation loss:
+0.5393659995798531
+Epoch: 6 | Training loss: 0.392541298038376 | Validation loss:
+0.5278636068389434
+Epoch: 7 | Training loss: 0.37375383411174645 | Validation loss:
+0.518163125236696
+Epoch: 8 | Training loss: 0.3572679116483345 | Validation loss:
+0.5096129103639213
+Epoch: 9 | Training loss: 0.3427279503022216 | Validation loss:
+0.5021873336065107
+Epoch: 10 | Training loss: 0.3298796818923012 | Validation loss:
+0.4957784337614395
+Epoch: 11 | Training loss: 0.3181586722159671 | Validation loss:
+0.4898697002075382
+Epoch: 12 | Training loss: 0.3076801193968355 | Validation loss:
+0.48474629690741194
+Epoch: 13 | Training loss: 0.2982128003853851 | Validation loss:
+0.4801780262355908
+Epoch: 14 | Training loss: 0.28952700240096446 | Validation loss:
+0.476046648306512
+Epoch: 15 | Training loss: 0.2816074738661983 | Validation loss:
+0.4723022476416847
+Epoch: 16 | Training loss: 0.27435839211556023 | Validation loss:
+0.4689399430736189
+Epoch: 17 | Training loss: 0.2676557309969343 | Validation loss:
+0.46589486635133853
+Epoch: 18 | Training loss: 0.26145261550060966 | Validation loss:
+0.46315817912282725
+Epoch: 19 | Training loss: 0.2557213561362758 | Validation loss:
+0.46061933558601625
+Epoch: 20 | Training loss: 0.2504005715076555 | Validation loss:
+0.4583338686037871
+Epoch: 21 | Training loss: 0.2454502162140767 | Validation loss:
+0.4562377581744775
+Epoch: 22 | Training loss: 0.2408487775774507 | Validation loss:
+0.45432348119280247
+Epoch: 23 | Training loss: 0.23652434330595884 | Validation loss:
+0.45261253085923286
+Epoch: 24 | Training loss: 0.23251096987639402 | Validation loss:
+0.450967321392916
+Epoch: 25 | Training loss: 0.22871128446241454 | Validation loss:
+0.4495271018168438
+Epoch: 26 | Training loss: 0.22517294232930965 | Validation loss:
+0.44816946371521554
+Epoch: 27 | Training loss: 0.22182728435613464 | Validation loss:
+0.4469412008165293
+Epoch: 28 | Training loss: 0.21867789523858366 | Validation loss:
+0.4458349425456607
+Epoch: 29 | Training loss: 0.21573151217419348 | Validation loss:
+0.4447761463311327
+Epoch: 30 | Training loss: 0.21292211374747602 | Validation loss:
+0.4438538267771761
+Epoch: 31 | Training loss: 0.21028246390627617 | Validation loss:
+0.442971785295461
+Epoch: 32 | Training loss: 0.20779060379635828 | Validation loss:
+0.4421492021197679
+Epoch: 33 | Training loss: 0.20542159093255227 | Validation loss:
+0.44146197655135766
+Epoch: 34 | Training loss: 0.20318153571027425 | Validation loss:
+0.44078352741142124
+Epoch: 35 | Training loss: 0.20105750155484847 | Validation loss:
+0.4401634450532198
+Epoch: 36 | Training loss: 0.19904147808704342 | Validation loss:
+0.4396253571483312
+Epoch: 37 | Training loss: 0.19712715006895337 | Validation loss:
+0.43908948052431995
+Epoch: 38 | Training loss: 0.19530573607981377 | Validation loss:
+0.43862857370497
+Epoch: 39 | Training loss: 0.19357547529539706 | Validation loss:
+0.4382465576691501
+Epoch: 40 | Training loss: 0.19192583240476216 | Validation loss:
+0.43786199113549273
+Epoch: 41 | Training loss: 0.19035698450143498 | Validation loss:
+0.43753394116824806
+Epoch: 42 | Training loss: 0.188855025905954 | Validation loss:
+0.4371947910383706
+Epoch: 43 | Training loss: 0.18742964234154447 | Validation loss:
+0.4369411039631788
+Epoch: 44 | Training loss: 0.1860621966837093 | Validation loss:
+0.4366365742987094
+Epoch: 45 | Training loss: 0.18476024384957002 | Validation loss:
+0.43640643491732733
+Epoch: 46 | Training loss: 0.1835193172058706 | Validation loss:
+0.43617829326607194
+Epoch: 47 | Training loss: 0.1823299223133357 | Validation loss:
+0.4360024645158312
+Epoch: 48 | Training loss: 0.18118876802188982 | Validation loss:
+0.4358853825434451
+    \end{Verbatim}
+
+    Now plot the training and validation history per epoch. Does your model
+underfit, overfit or is it about right? Explain why.
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{31}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{plt}\PY{o}{.}\PY{n}{plot}\PY{p}{(}\PY{n}{tr\PYZus{}loss\PYZus{}tfidf}\PY{p}{,} \PY{n}{label}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Training loss}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{plot}\PY{p}{(}\PY{n}{dev\PYZus{}loss\PYZus{}tfidf}\PY{p}{,} \PY{n}{label}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Validation loss}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+
+\PY{n}{plt}\PY{o}{.}\PY{n}{xlabel}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Epochs}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{ylabel}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Loss}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+
+\PY{n}{plt}\PY{o}{.}\PY{n}{title}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Training Monitoring (Binary \PYZhy{} TFIDF)}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+
+\PY{n}{plt}\PY{o}{.}\PY{n}{legend}\PY{p}{(}\PY{p}{)}
+
+\PY{n}{plt}\PY{o}{.}\PY{n}{show}\PY{p}{(}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_58_0.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+
+    According to the plot \textbf{Training Monitoring (Binary - TFIDF)},
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  The training loss decreases as epoch increases and eventually reaches
+  a point of stability
+\item
+  The validation loss decreases as epoch increases and eventually
+  reaches a point of stability
+\item
+  There exists a ``generalisation gap'' between validation and training
+  loss
+\end{enumerate}
+
+The following techniques are implemented in the Stochastic Gradient
+Descent algorithm to avoid overfitting of the training data:
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  Early stopping
+\item
+  L2 regularisation
+\end{enumerate}
+
+Hence, the model is \textbf{about right}.
+
+    Compute accuracy, precision, recall and F1-scores:
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{32}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{args} \PY{o}{=} \PY{n}{sentiment\PYZus{}test\PYZus{}labels}\PY{p}{,} \PY{n}{predict\PYZus{}class}\PY{p}{(}\PY{n}{sentiment\PYZus{}test\PYZus{}tfidf}\PY{p}{,} \PY{n}{w\PYZus{}tfidf}\PY{p}{)}
+
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Accuracy:}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{accuracy\PYZus{}score}\PY{p}{(}\PY{o}{*}\PY{n}{args}\PY{p}{)}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Precision:}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{precision\PYZus{}score}\PY{p}{(}\PY{o}{*}\PY{n}{args}\PY{p}{)}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Recall:}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{recall\PYZus{}score}\PY{p}{(}\PY{o}{*}\PY{n}{args}\PY{p}{)}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{F1\PYZhy{}Score:}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{f1\PYZus{}score}\PY{p}{(}\PY{o}{*}\PY{n}{args}\PY{p}{)}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+Accuracy: 0.8925
+Precision: 0.9025641025641026
+Recall: 0.88
+F1-Score: 0.8911392405063291
+    \end{Verbatim}
+
+    Print top-10 most positive and negative words:
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{33}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{top10\PYZus{}positive\PYZus{}ids} \PY{o}{=} \PY{p}{(}\PY{o}{\PYZhy{}}\PY{n}{w\PYZus{}tfidf}\PY{p}{)}\PY{o}{.}\PY{n}{argsort}\PY{p}{(}\PY{p}{)}\PY{p}{[}\PY{p}{:}\PY{l+m+mi}{10}\PY{p}{]}
+\PY{n}{top10\PYZus{}negative\PYZus{}ids} \PY{o}{=} \PY{n}{w\PYZus{}tfidf}\PY{o}{.}\PY{n}{argsort}\PY{p}{(}\PY{p}{)}\PY{p}{[}\PY{p}{:}\PY{l+m+mi}{10}\PY{p}{]}
+
+\PY{n+nb}{print}\PY{p}{(}
+    \PY{l+s+sa}{f}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Top 10 positive: }\PY{l+s+s1}{\PYZob{}}\PY{l+s+s1}{[vocab\PYZus{}id\PYZus{}to\PYZus{}word[id] for id in top10\PYZus{}positive\PYZus{}ids]\PYZcb{} }\PY{l+s+se}{\PYZbs{}n}\PY{l+s+s1}{\PYZsq{}}
+\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}
+    \PY{l+s+sa}{f}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Top 10 negative: }\PY{l+s+s1}{\PYZob{}}\PY{l+s+s1}{[vocab\PYZus{}id\PYZus{}to\PYZus{}word[id] for id in top10\PYZus{}negative\PYZus{}ids]\PYZcb{}}\PY{l+s+s1}{\PYZsq{}}
+\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+Top 10 positive: ['hilarious', 'perfectly', 'terrific', 'great', 'memorable',
+'overall', 'definitely', 'perfect', 'excellent', 'fun']
+
+Top 10 negative: ['bad', 'worst', 'boring', 'supposed', 'unfortunately',
+'ridiculous', 'waste', 'awful', 'script', 'nothing']
+    \end{Verbatim}
+
+    \hypertarget{features-evaluation}{%
+\subsubsection{Features Evaluation}\label{features-evaluation}}
+
+The top 10 features obtained for each class using \textbf{TF.IDF
+vectors} are reasonable. They are more relevant than the features
+obtained using \textbf{count vectors}.
+
+    \hypertarget{if-we-were-to-apply-the-classifier-weve-learned-into-a-different-domain-such-as-laptop-reviews-or-restaurant-reviews-do-you-think-these-features-would-generalise-well-can-you-propose-what-features-the-classifier-could-pick-up-as-important-in-the-new-domain}{%
+\subsection{If we were to apply the classifier we've learned into a
+different domain such as laptop reviews or restaurant reviews, do you
+think these features would generalise well? Can you propose what
+features the classifier could pick up as important in the new
+domain?}\label{if-we-were-to-apply-the-classifier-weve-learned-into-a-different-domain-such-as-laptop-reviews-or-restaurant-reviews-do-you-think-these-features-would-generalise-well-can-you-propose-what-features-the-classifier-could-pick-up-as-important-in-the-new-domain}}
+
+\hypertarget{count-vectors}{%
+\subsubsection{Count Vectors}\label{count-vectors}}
+
+The following top 10 words: `great', `well', `bad', `worst',
+`unfortunately' are common words in reviews. If the classifier is to
+apply into a different domain, it is expected that the classier will be
+able to correctly classify some of the reviews, assuming that the
+reviews satisfy the following conditions:
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  The positive reviews must contain words that have been learnt by the
+  model as positive (e.g.~great, well, etc.)
+\item
+  The negative reviews must contain words that have been learnt by the
+  model as negative (e.g.~bad, worst, etc.)
+\end{enumerate}
+
+However, this assumption is unlikely to be true for most of the laptop
+or restaurant reviews in real-life scenarios. A user may give a positive
+rating despite writing many negative words in the review. It is also
+possible that a review contains only neutral unemotional words but
+expresses a different sentiment.
+
+Most of the top features are irrelevant to laptop or restaurant reviews,
+such as `fun', `movies', `script', `boring, 'plot', etc. This implies
+that the classifier is likely to be underfitting in the new domains and
+perform worse than the movie domain. Therefore, these features
+\textbf{would not generalise well} in a new domain.
+
+\hypertarget{tf.idf-vectors}{%
+\subsubsection{TF.IDF Vectors}\label{tf.idf-vectors}}
+
+The TF.IDF vectors model has better performance than the count vectors
+model on the movie review domain due to the top features being
+identified more accurately. Conversely, this has implied that the TF.IDF
+vectors model is less generalised than the count vectors model. Hence,
+the features \textbf{would not generalise well} in a new domain too.
+
+\hypertarget{features-in-the-new-domain}{%
+\subsubsection{Features in the New
+Domain}\label{features-in-the-new-domain}}
+
+Apart from the common sentiment lexicon (e.g.~good, bad), the classifier
+could pick up features that is specific to the new domain. Below is an
+estimation of possible top features in the respective new domains:
+
+Laptop reviews: The features learned are likely to be the terms that are
+related to the attribute of an electrical device, as shown in the
+following list. Possible n-grams may include
+\texttt{(durable,\ battery)}, \texttt{(hd,\ screen)}, etc.
+
+\begin{itemize}
+\tightlist
+\item
+  long ; short (battery life)
+\item
+  light ; heavy (weight)
+\item
+  thin ; bulky (physical size)
+\item
+  cheap ; expensive (price)
+\item
+  fast ; slow (performance
+\end{itemize}
+
+Restaurant reviews: The features learned are likely to be the terms that
+are related to food quality and the customer experience in the
+restaurant, as shown in the following list. Possible n-grams may include
+\texttt{(polite,\ staff)}, \texttt{(tasty,\ food)}, etc.
+
+\begin{itemize}
+\tightlist
+\item
+  long ; short (waiting time)
+\item
+  delicious ; disgusting, tasteless (food quality)
+\item
+  polite ; rude (staff attitude)
+\item
+  cosy ; dull (environment)
+\item
+  clean ; dirty, messy (hygiene)
+\item
+  cheap ; expensive (price)
+\end{itemize}
+
+    \hypertarget{discuss-how-did-you-choose-model-hyperparameters-e.g.-learning-rate-and-regularisation-strength-what-is-the-relation-between-training-epochs-and-learning-rate-how-does-the-regularisation-strength-affect-performance}{%
+\subsection{Discuss how did you choose model hyperparameters
+(e.g.~learning rate and regularisation strength)? What is the relation
+between training epochs and learning rate? How does the regularisation
+strength affect
+performance?}\label{discuss-how-did-you-choose-model-hyperparameters-e.g.-learning-rate-and-regularisation-strength-what-is-the-relation-between-training-epochs-and-learning-rate-how-does-the-regularisation-strength-affect-performance}}
+
+\hypertarget{objective}{%
+\subsubsection{Objective}\label{objective}}
+
+The primary objective is to find the best configuration of
+hyperparameters that will give the best scores on the development and
+test set. It can be achieved by improving the generalisation of the
+learned model through the following processes:
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\item
+  Lower the generalisation gap between validation and training loss.
+  This is based on the assumption that both the validation and training
+  loss has reached a point of stability, and the model is in good fit.
+\item
+  Improve, or at least maintain the precision, recall, and F1-score
+  while lowering the validation loss.
+\end{enumerate}
+
+The processes are carried out using \emph{trial and error} strategy.
+Small performance improvements (≤ 2\%) are expected after the
+optimisation. The quality of the training dataset is still the major
+factor in model performance.
+
+While many existing hyperparameters optimisation algorithms are better
+than the chosen strategy, almost all of them require a searching
+algorithm to work. After considering the scope of this assignment and
+the feasibility of self-implementing a searching algorithm, it is
+decided to choose a simpler approach for experimentation and learning
+purpose.
+
+\hypertarget{limitations-of-trial-and-error-method}{%
+\subsubsection{Limitations of Trial and Error
+Method}\label{limitations-of-trial-and-error-method}}
+
+Although the trial and error method is a straightforward strategy and
+requires no extra implementation, it is prone to the local optimum
+problem. It is impractical to try every possible combination of learning
+rate and regularisation strength to find the optimal result. Therefore,
+the best achievable performance improvement through fine-tuning is
+largely dependent on the initial set of values selected to explore the
+hyperparameters.
+
+Furthermore, another optimisation problem has arisen as the number of
+hyperparameters to search is more than one. This has lead to another
+assumption that the optimisation order of hyperparameters may have a
+certain impact on the final result.
+
+\hypertarget{hyperparameters-optimisation}{%
+\subsubsection{Hyperparameters
+Optimisation}\label{hyperparameters-optimisation}}
+
+Before performing the search on hyperparameters, the lower and upper
+bounds for the values of the hyperparameters need to be defined. The
+lower bound value is the baseline for the model performance, and the
+upper bound is the value where the performance would start dropping.
+Both lower bound and upper bound would converge after each trial.
+
+For consistency, the initial lower and upper bound of learning rate is
+set to \texttt{0.0001} and \texttt{0.1} respectively. The initial lower
+and upper bound of regularisation strength is set to \texttt{0.00001}
+and \texttt{0.01} respectively.
+
+\hypertarget{optimisation-procedure-for-learning-rate}{%
+\paragraph{Optimisation procedure for learning
+rate}\label{optimisation-procedure-for-learning-rate}}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\item
+  Set \texttt{lr=0.0001} and \texttt{alpha=0.00001}. Train and record
+  the lower bound scores.
+\item
+  If the gradient descent is taking too many epochs (\textgreater{} 100)
+  to converge, increase the value of \texttt{lr}. Repeat this step until
+  the number of epochs is below 100. If the final scores are higher than
+  the current lower bound scores, then update the lower bound, else
+  update the upper bound
+\item
+  If the current \texttt{lr} is the lower bound value, increase
+  \texttt{lr} until the new scores are lower than the current lower
+  bound scores, then record this value as the new upper bound.
+\item
+  If the current \texttt{lr} is the upper bound value, decrease
+  \texttt{lr} until the new scores are higher than the current upper
+  bound scores. Record this value as the new lower bound.
+\item
+  Repeat Step 3 and 4 until the upper bound scores ≥ lower bound scores.
+  The \texttt{lr} value is now considered to be the optimal value.
+\end{enumerate}
+
+\hypertarget{optimisation-procedure-for-regularisation-strength}{%
+\paragraph{Optimisation procedure for regularisation
+strength}\label{optimisation-procedure-for-regularisation-strength}}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\item
+  Set \texttt{lr} to the optimal value obtained and
+  \texttt{alpha=0.00001}. Train and record the lower bound validation
+  loss.
+\item
+  If the current \texttt{alpha} is the lower bound value, increase
+  \texttt{alpha} until the validation loss has increased \textbf{OR} the
+  scores have decreased. Record this value as the new upper bound
+\item
+  If the current \texttt{alpha} is the upper bound value, decrease
+  \texttt{alpha} until the new validation loss is lower than the current
+  upper bound validation loss. Record this value as the new lower bound.
+\item
+  Repeat Step 2 and 3 until a lower validation loss has been found
+  \textbf{OR} the scores have improved.
+\end{enumerate}
+
+\textbf{Note:} The optimisation procedure is a general guideline for the
+manual hyperparameters search. There may be cases where several changes
+have to be adapted.
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\item
+  There is no fixed value of how much should \texttt{lr} and
+  \texttt{alpha} increase or decrease during the optimisation.
+  \texttt{lr} and \texttt{alpha} are adjusted according to the amount of
+  changes in scores and validation loss in the previous trial.
+\item
+  When optimising \texttt{alpha}, it is possible that the validation
+  loss and scores are not improving after several trials. In this case,
+  the initial \texttt{alpha} value is considered to be the optimum.
+\end{enumerate}
+
+\hypertarget{count-vectors}{%
+\subsubsection{Count Vectors}\label{count-vectors}}
+
+\hypertarget{optimising-learning-rate}{%
+\paragraph{Optimising Learning Rate}\label{optimising-learning-rate}}
+
+Initial parameters: \texttt{lr=0.0001,\ alpha=0.00001}
+
+\begin{longtable}[]{@{}llllllll@{}}
+\toprule
+Trial & Learning rate & Epochs & Tr. loss & Val. loss & Precision &
+Recall & F1-Score\tabularnewline
+\midrule
+\endhead
+0 & 0.0001 & 70 & 0.2037 & 0.4100 & 0.8536 & 0.875 &
+0.8641\tabularnewline
+1 & 0.00011 & 70 & 0.1932 & 0.4072 & 0.8522 & 0.865 &
+0.8585\tabularnewline
+2 & 0.000105 & 70 & 0.1983 & 0.4085 & 0.8487 & 0.87 &
+0.8592\tabularnewline
+3 & 0.0001025 & 70 & 0.2009 & 0.4092 & 0.8487 & 0.87 &
+0.8592\tabularnewline
+4 & 0.00010125 & 70 & 0.2023 & 0.4096 & 0.8536 & 0.875 &
+0.8641\tabularnewline
+\bottomrule
+\end{longtable}
+
+The optimal \texttt{lr} is found to be \texttt{0.00010125}.
+
+\hypertarget{optimising-regularisation-strength}{%
+\paragraph{Optimising Regularisation
+Strength}\label{optimising-regularisation-strength}}
+
+Initial parameters: \texttt{lr=0.00010125,\ alpha=0.00001}
+
+\begin{longtable}[]{@{}llllllll@{}}
+\toprule
+Trial & Alpha & Epochs & Tr. loss & Val. loss & Precision & Recall &
+F1-Score\tabularnewline
+\midrule
+\endhead
+0 & 0.00001 & 70 & 0.2023 & 0.40962 & 0.8536 & 0.875 &
+0.8641\tabularnewline
+1 & 0.00002 & 70 & 0.2024 & 0.40966 & 0.8536 & 0.875 &
+0.8641\tabularnewline
+2 & 0.000015 & 70 & 0.2023 & 0.40964 & 0.8536 & 0.875 &
+0.8641\tabularnewline
+3 & 0.0000125 & 70 & 0.2023 & 0.40963 & 0.8536 & 0.875 &
+0.8641\tabularnewline
+4 & 0.00001125 & 70 & 0.2023 & 0.40963 & 0.8536 & 0.875 &
+0.8641\tabularnewline
+5 & 0.0001 & 70 & 0.2028 & 0.4099 & 0.8536 & 0.875 &
+0.8641\tabularnewline
+6 & 0.001 & 70 & 0.2074 & 0.4134 & 0.8536 & 0.875 &
+0.8641\tabularnewline
+7 & 0.01 & 47 & 0.2788 & 0.4487 & 0.8514 & 0.86 & 0.8557\tabularnewline
+\bottomrule
+\end{longtable}
+
+No better \texttt{alpha} has been found. The initial \texttt{alpha} is
+considered to be the optimal value.
+
+\textbf{Conclusion}: Based on the trials above, it can be concluded that
+the optimal values are \texttt{lr=0.00010125} and \texttt{alpha=0.00001}
+
+\hypertarget{tf.idf-vectors}{%
+\subsubsection{TF.IDF Vectors}\label{tf.idf-vectors}}
+
+\hypertarget{optimising-learning-rate-1}{%
+\paragraph{Optimising Learning Rate}\label{optimising-learning-rate-1}}
+
+Initial parameters: \texttt{lr=0.0001,\ alpha=0.00001}
+
+\begin{longtable}[]{@{}llllllll@{}}
+\toprule
+Trial & Learning rate & Epochs & Tr. loss & Val. loss & Precision &
+Recall & F1-Score\tabularnewline
+\midrule
+\endhead
+0 & 0.0001 & 99 & 0.5025 & 0.5866 & 0.8436 & 0.89 &
+0.8661\tabularnewline
+1 & 0.0002 & 99 & 0.4053 & 0.5329 & 0.8634 & 0.885 &
+0.8740\tabularnewline
+2 & 0.0003 & 99 & 0.3439 & 0.4994 & 0.8676 & 0.885 &
+0.8762\tabularnewline
+3 & 0.001 & 99 & 0.1760 & 0.4125 & 0.8923 & 0.87 & 0.8810\tabularnewline
+4 & 0.002 & 99 & 0.1059 & 0.3819 & 0.8883 & 0.875 &
+0.8816\tabularnewline
+5 & 0.003 & 99 & 0.0762 & 0.3724 & 0.8826 & 0.865 &
+0.8737\tabularnewline
+6 & 0.0029 & 99 & 0.0784 & 0.3730 & 0.8826 & 0.865 &
+0.8737\tabularnewline
+7 & 0.0028 & 99 & 0.0807 & 0.3736 & 0.8871 & 0.865 &
+0.8759\tabularnewline
+8 & 0.0027 & 99 & 0.0831 & 0.3743 & 0.8871 & 0.865 &
+0.8759\tabularnewline
+9 & 0.0026 & 99 & 0.0858 & 0.3751 & 0.8871 & 0.865 &
+0.8759\tabularnewline
+10 & 0.0025 & 99 & 0.0893 & 0.3762 & 0.8883 & 0.875 &
+0.8816\tabularnewline
+\bottomrule
+\end{longtable}
+
+The ``temporary'' optimal \texttt{lr} is found to be \texttt{0.0025}
+because the model is not showing a converging trenddespite the learning
+rate has increased significantly.
+
+\hypertarget{optimising-regularisation-strength-1}{%
+\paragraph{Optimising Regularisation
+Strength}\label{optimising-regularisation-strength-1}}
+
+Initial parameters: \texttt{lr=0.0025,\ alpha=0.00001}
+
+\begin{longtable}[]{@{}llllllll@{}}
+\toprule
+Trial & Alpha & Epochs & Tr. loss & Val. loss & Precision & Recall &
+F1-Score\tabularnewline
+\midrule
+\endhead
+0 & 0.00001 & 99 & 0.0893 & 0.3762 & 0.8883 & 0.875 &
+0.8816\tabularnewline
+1 & 0.00002 & 99 & 0.0904 & 0.3775 & 0.8883 & 0.875 &
+0.8816\tabularnewline
+2 & 0.00004 & 99 & 0.0940 & 0.3805 & 0.8838 & 0.875 &
+0.8793\tabularnewline
+3 & 0.0001 & 99 & 0.1044 & 0.3893 & 0.8838 & 0.875 &
+0.8793\tabularnewline
+4 & 0.0002 & 83 & 0.1302 & 0.4043 & 0.8883 & 0.875 &
+0.8816\tabularnewline
+5 & 0.0004 & 70 & 0.1645 & 0.4265 & 0.8934 & 0.88 &
+0.8866\tabularnewline
+6 & 0.0006 & 58 & 0.1943 & 0.4439 & 0.9025 & 0.88 &
+0.8911\tabularnewline
+7 & 0.0008 & 48 & 0.2206 & 0.4583 & 0.8974 & 0.875 &
+0.8860\tabularnewline
+\bottomrule
+\end{longtable}
+
+A converging pattern has been observed. However, since the \texttt{lr}
+used is the ``temporary'' optimal value, a further optimisation is
+required validate it.
+
+\hypertarget{optimising-learning-rate-and-regularisation-strength}{%
+\paragraph{Optimising Learning Rate and Regularisation
+Strength}\label{optimising-learning-rate-and-regularisation-strength}}
+
+Based on the trials above, it could be concluded that the optimal values
+are \texttt{lr=0.0025} and \texttt{alpha=0.0006}. However, it has been
+observed that increasing the learning rate only is not decreasing the
+epochs required. The epochs required only start decreasing when
+\texttt{alpha} is increased to \texttt{0.0002}. Therefore, further
+optimisation is required to validate the optimal values.
+
+Initial parameters: \texttt{lr=0.0025,\ alpha=0.0006}
+
+\begin{longtable}[]{@{}lllllllll@{}}
+\toprule
+Trial & Learning rate & Alpha & Epochs & Tr. loss & Val. loss &
+Precision & Recall & F1-Score\tabularnewline
+\midrule
+\endhead
+0 & 0.0025 & 0.0006 & 58 & 0.1943 & 0.4439 & 0.9025 & 0.88 &
+0.8911\tabularnewline
+1 & 0.003 & 0.0006 & 47 & 0.1955 & 0.4440 & 0.9025 & 0.88 &
+0.8911\tabularnewline
+2 & 0.004 & 0.0006 & 37 & 0.1924 & 0.4437 & 0.9025 & 0.88 &
+0.8911\tabularnewline
+3 & 0.005 & 0.0006 & 29 & 0.1929 & 0.4437 & 0.9025 & 0.88 &
+0.8911\tabularnewline
+4 & 0.006 & 0.0006 & 24 & 0.1927 & 0.4436 & 0.9025 & 0.88 &
+0.8911\tabularnewline
+5 & 0.003 & 0.00055 & 51 & 0.1866 & 0.4399 & 0.9025 & 0.88 &
+0.8911\tabularnewline
+6 & 0.0032 & 0.0005 & 48 & 0.1815 & 0.4359 & 0.9025 & 0.88 &
+0.8911\tabularnewline
+\bottomrule
+\end{longtable}
+
+After further optimisation, it can be concluded that the optimal values
+are \texttt{lr=0.0032} and \texttt{alpha=0.0005}. These two values have
+the lowest training and validation loss while maintaining the same
+scores.
+
+\hypertarget{relationship-between-epochs-and-learning-rate}{%
+\subsubsection{Relationship Between Epochs and Learning
+Rate}\label{relationship-between-epochs-and-learning-rate}}
+
+Before conducting any of the optimisation trials, the relationship
+between epochs and learning can already be deduced from the equation in
+\texttt{SGD} function. By observing the line
+\texttt{weights\ -=\ lr\ *\ (...)} in \texttt{SGD} function, it can be
+deduced that the larger the learning rate, the bigger the weight update
+after each epoch. Therefore, it is assumed that the higher the learning
+rate, the lower the epochs required to converge.
+
+As shown in the table in section \textbf{TF.IDF: Optimising Learning
+Rate and Regularisation Strength} above, it has been proved that epochs
+are inversely proportional to the learning rate. Another test has been
+conducted to further validate the assumption,
+
+\begin{itemize}
+\tightlist
+\item
+  Test vector: \texttt{count}
+\item
+  Parameters: \texttt{alpha=0.00001,\ epochs=300}
+\end{itemize}
+
+\begin{longtable}[]{@{}lll@{}}
+\toprule
+Trial & Learning rate & Epochs required\tabularnewline
+\midrule
+\endhead
+0 & 0.00001 & 299\tabularnewline
+1 & 0.0001 & 70\tabularnewline
+2 & 0.001 & 14\tabularnewline
+3 & 0.01 & 0\tabularnewline
+\bottomrule
+\end{longtable}
+
+\hypertarget{discussion-about-epochs-learning-rate-and-model-performance}{%
+\paragraph{Discussion about Epochs, Learning Rate, and Model
+Performance}\label{discussion-about-epochs-learning-rate-and-model-performance}}
+
+Choosing a good learning rate is challenging as every model differs from
+each other. Generally, it is required to perform some preliminary
+analysis on the model performance before the hyperparameters
+optimisation.
+
+\begin{itemize}
+\tightlist
+\item
+  If the learning rate is too large, the model may overshoot and lead to
+  divergent behaviour (epochs required is low)
+\item
+  If the learning rate is too small, the model will require many updates
+  to the weights before the loss is converged (epochs required is high)
+\end{itemize}
+
+\hypertarget{relationship-between-regularisation-strength-and-model-performance}{%
+\subsubsection{Relationship Between Regularisation Strength and Model
+Performance}\label{relationship-between-regularisation-strength-and-model-performance}}
+
+From the table in \textbf{Count Vectors: Optimising Regularisation
+Strength} and \textbf{TF.IDF Vectors: Optimising Regularisation
+Strength}, it is observed that the regularisation strength can affect
+the epochs required to converge, and thus can affect the model
+performance indirectly. Moreover, a small change in regularisation
+strength would only have minimal impact on the overall metrics.
+
+By observing the line
+\texttt{weights\ -=\ lr\ *\ (...\ +\ 2\ *\ alpha\ *\ weights)} in
+\texttt{SGD} function, it can be deduced that the higher the
+regularisation strength, the lower the epochs required to converge.
+However, as shown in \textbf{TF.IDF Vectors: Optimising Regularisation
+Strength}, increasing the regularisation strength will also increase
+both training and validation loss. This does not always produce an
+adverse effect on the model performance, as performance gained has been
+observed when the regularisation strength has been increased to a
+certain value.
+
+\hypertarget{discussion-about-loss-and-model-performance}{%
+\paragraph{Discussion about Loss and Model
+Performance}\label{discussion-about-loss-and-model-performance}}
+
+The increase in training and validation loss which lead to the
+improvement in model performance can be explained as follows:
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  Before the optimisation, the model is slightly overfitted on the
+  training dataset
+\item
+  After the optimisation, the increase in regularisation strength has
+  improved the generalisation of the model, thus observing an increase
+  in training and validation loss
+\end{enumerate}
+
+    \hypertarget{full-results}{%
+\subsection{Full Results}\label{full-results}}
+
+\begin{longtable}[]{@{}cccc@{}}
+\toprule
+LR & Precision & Recall & F1-Score\tabularnewline
+\midrule
+\endhead
+BOW-count & 0.8536585365853658 & 0.875 &
+0.8641975308641976\tabularnewline
+BOW-tfidf & 0.9025641025641026 & 0.88 &
+0.8911392405063291\tabularnewline
+\bottomrule
+\end{longtable}
+
+    \hypertarget{multi-class-logistic-regression}{%
+\section{Multi-class Logistic
+Regression}\label{multi-class-logistic-regression}}
+
+Now you need to train a Multiclass Logistic Regression (MLR) Classifier
+by extending the Binary model you developed above. You will use the MLR
+model to perform topic classification on the AG news dataset consisting
+of three classes:
+
+\begin{itemize}
+\tightlist
+\item
+  Class 1: World
+\item
+  Class 2: Sports
+\item
+  Class 3: Business
+\end{itemize}
+
+You need to follow the same process as in Task 1 for data processing and
+feature extraction by reusing the functions you wrote.
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{34}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{topic\PYZus{}dev} \PY{o}{=} \PY{n}{pd}\PY{o}{.}\PY{n}{read\PYZus{}csv}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{data\PYZus{}topic/dev.csv}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{names}\PY{o}{=}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{label}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{text}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{)}
+\PY{n}{topic\PYZus{}test} \PY{o}{=} \PY{n}{pd}\PY{o}{.}\PY{n}{read\PYZus{}csv}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{data\PYZus{}topic/test.csv}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{names}\PY{o}{=}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{label}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{text}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{)}
+\PY{n}{topic\PYZus{}train} \PY{o}{=} \PY{n}{pd}\PY{o}{.}\PY{n}{read\PYZus{}csv}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{data\PYZus{}topic/train.csv}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{names}\PY{o}{=}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{label}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{text}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{35}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{topic\PYZus{}train}\PY{o}{.}\PY{n}{head}\PY{p}{(}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+            \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
+\prompt{Out}{outcolor}{35}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+   label                                               text
+0      1  Reuters - Venezuelans turned out early\textbackslash{}and in {\ldots}
+1      1  Reuters - South Korean police used water canno{\ldots}
+2      1  Reuters - Thousands of Palestinian\textbackslash{}prisoners i{\ldots}
+3      1  AFP - Sporadic gunfire and shelling took place{\ldots}
+4      1  AP - Dozens of Rwandan soldiers flew into Suda{\ldots}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{36}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{topic\PYZus{}dev\PYZus{}texts} \PY{o}{=} \PY{n+nb}{list}\PY{p}{(}\PY{n}{topic\PYZus{}dev}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{text}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{)}
+\PY{n}{topic\PYZus{}dev\PYZus{}labels} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{array}\PY{p}{(}\PY{n}{topic\PYZus{}dev}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{label}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{)}
+
+\PY{n}{topic\PYZus{}test\PYZus{}texts} \PY{o}{=} \PY{n+nb}{list}\PY{p}{(}\PY{n}{topic\PYZus{}test}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{text}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{)}
+\PY{n}{topic\PYZus{}test\PYZus{}labels} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{array}\PY{p}{(}\PY{n}{topic\PYZus{}test}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{label}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{)}
+
+\PY{n}{topic\PYZus{}train\PYZus{}texts} \PY{o}{=} \PY{n+nb}{list}\PY{p}{(}\PY{n}{topic\PYZus{}train}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{text}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{)}
+\PY{n}{topic\PYZus{}train\PYZus{}labels} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{array}\PY{p}{(}\PY{n}{topic\PYZus{}train}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{label}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{37}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{vocab}\PY{p}{,} \PY{n}{df}\PY{p}{,} \PY{n}{\PYZus{}} \PY{o}{=} \PY{n}{get\PYZus{}vocab}\PY{p}{(}\PY{n}{topic\PYZus{}train\PYZus{}texts}\PY{p}{,} \PY{n}{keep\PYZus{}topN}\PY{o}{=}\PY{l+m+mi}{5000}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{n+nb}{len}\PY{p}{(}\PY{n}{vocab}\PY{p}{)}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{n+nb}{list}\PY{p}{(}\PY{n}{vocab}\PY{p}{)}\PY{p}{[}\PY{p}{:}\PY{l+m+mi}{100}\PY{p}{]}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{n}{df}\PY{o}{.}\PY{n}{most\PYZus{}common}\PY{p}{(}\PY{p}{)}\PY{p}{[}\PY{p}{:}\PY{l+m+mi}{10}\PY{p}{]}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+5000
+
+[('region', 'south', 'ossetia'), 'delayed', 'takes', 'loans', 'billing',
+('chancellor', 'gerhard'), 'joy', ('lower', 'oil', 'prices'), ('al', 'sadr'),
+'wall', ('monday', 'saying'), ('strained', 'right'), ('crude', 'prices',
+'remain'), 'use', 'son', 'turn', ('four', 'people'), ('search', 'engine'),
+'decisive', ('republican', 'national'), ('fell', 'lowest'), ('out', 'olympic',
+'tennis'), ('katerina', 'thanou'), 'embassy', 'justin', ('awaited', 'initial'),
+'members', ('oil', 'prices', 'upbeat'), ('hours', 'visit'), 'residents',
+('maoist', 'rebels'), 'led', 'added', 'kid', 'economic', ('trade', 'deficit'),
+'wood', 'appeal', 'before', 'commission', 'upset', 'au', 'kill', ('economic',
+'data', 'showing'), 'park', 'effort', 'spokesman', 'battles', ('york',
+'stocks'), 'enter', 'decade', ('another', 'record'), ('housing', 'starts',
+'rebounded'), 'unusual', 'medtronic', 'independence', 'starts', 'carrier',
+'awarded', ('britain', 'charged'), 'under', ('olympic', 'tennis', 'tournament'),
+('said', 'received'), ('home', 'depot'), 'chances', 'white', 'moves',
+('expected', 'declare'), 'negotiations', ('tearing', 'anterior', 'cruciate'),
+'sprinter', ('rival', 'province'), ('regular', 'season'), 'hoped', 'paperwork',
+'chicago', 'view', 'louis', 'official', ('found', 'out'), ('top', 'al'),
+('toronto', 'blue', 'jays'), ('thousands', 'people'), ('hang', 'over'),
+'canadian', ('hd', 'lt', 'gt'), ('hungarian', 'grand'), ('iraqi', 'political'),
+('equipment', 'businesses'), 'career', 'champions', 'doubts', ('preliminary',
+'round'), 'agent', ('venezuelan', 'president', 'hugo'), 'tour', 'lawsuit',
+'story', 'unit', 'walked']
+
+[('reuters', 631), ('said', 432), ('tuesday', 413), ('wednesday', 344), ('new',
+325), ('ap', 275), ('athens', 245), ('monday', 221), ('first', 210), ('two',
+187)]
+    \end{Verbatim}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{38}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{vocab\PYZus{}id\PYZus{}to\PYZus{}word} \PY{o}{=} \PY{n+nb}{dict}\PY{p}{(}\PY{n+nb}{enumerate}\PY{p}{(}\PY{n}{vocab}\PY{p}{)}\PY{p}{)}
+
+\PY{n}{word\PYZus{}to\PYZus{}vocab\PYZus{}id} \PY{o}{=} \PY{p}{\PYZob{}}\PY{n}{v}\PY{p}{:} \PY{n}{k} \PY{k}{for} \PY{n}{k}\PY{p}{,} \PY{n}{v} \PY{o+ow}{in} \PY{n}{vocab\PYZus{}id\PYZus{}to\PYZus{}word}\PY{o}{.}\PY{n}{items}\PY{p}{(}\PY{p}{)}\PY{p}{\PYZcb{}}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{39}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{topic\PYZus{}train\PYZus{}texts\PYZus{}ngrams} \PY{o}{=} \PY{p}{(}\PY{n}{extract\PYZus{}ngrams}\PY{p}{(}\PY{n}{text}\PY{p}{,} \PY{n}{vocab}\PY{o}{=}\PY{n}{vocab}\PY{p}{)}
+                            \PY{k}{for} \PY{n}{text} \PY{o+ow}{in} \PY{n}{topic\PYZus{}train\PYZus{}texts}\PY{p}{)}
+
+\PY{n}{topic\PYZus{}dev\PYZus{}texts\PYZus{}ngrams} \PY{o}{=} \PY{p}{(}\PY{n}{extract\PYZus{}ngrams}\PY{p}{(}\PY{n}{text}\PY{p}{,} \PY{n}{vocab}\PY{o}{=}\PY{n}{vocab}\PY{p}{)}
+                          \PY{k}{for} \PY{n}{text} \PY{o+ow}{in} \PY{n}{topic\PYZus{}dev\PYZus{}texts}\PY{p}{)}
+
+\PY{n}{topic\PYZus{}test\PYZus{}texts\PYZus{}ngrams} \PY{o}{=} \PY{p}{(}\PY{n}{extract\PYZus{}ngrams}\PY{p}{(}\PY{n}{text}\PY{p}{,} \PY{n}{vocab}\PY{o}{=}\PY{n}{vocab}\PY{p}{)}
+                           \PY{k}{for} \PY{n}{text} \PY{o+ow}{in} \PY{n}{topic\PYZus{}test\PYZus{}texts}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \hypertarget{count-vectors}{%
+\subsubsection{Count vectors}\label{count-vectors}}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{40}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{topic\PYZus{}train\PYZus{}count} \PY{o}{=} \PY{n}{vectorise}\PY{p}{(}\PY{n}{topic\PYZus{}train\PYZus{}texts\PYZus{}ngrams}\PY{p}{,} \PY{n}{vocab}\PY{p}{)}
+
+\PY{n}{topic\PYZus{}dev\PYZus{}count} \PY{o}{=} \PY{n}{vectorise}\PY{p}{(}\PY{n}{topic\PYZus{}dev\PYZus{}texts\PYZus{}ngrams}\PY{p}{,} \PY{n}{vocab}\PY{p}{)}
+
+\PY{n}{topic\PYZus{}test\PYZus{}count} \PY{o}{=} \PY{n}{vectorise}\PY{p}{(}\PY{n}{topic\PYZus{}test\PYZus{}texts\PYZus{}ngrams}\PY{p}{,} \PY{n}{vocab}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \hypertarget{tf.idf-vectors}{%
+\subsubsection{TF.IDF vectors}\label{tf.idf-vectors}}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{41}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{total\PYZus{}topic\PYZus{}train\PYZus{}docs} \PY{o}{=} \PY{n+nb}{len}\PY{p}{(}\PY{n}{topic\PYZus{}train\PYZus{}texts}\PY{p}{)}
+\PY{n}{total\PYZus{}topic\PYZus{}dev\PYZus{}docs} \PY{o}{=} \PY{n+nb}{len}\PY{p}{(}\PY{n}{topic\PYZus{}dev\PYZus{}texts}\PY{p}{)}
+\PY{n}{total\PYZus{}topic\PYZus{}test\PYZus{}docs} \PY{o}{=} \PY{n+nb}{len}\PY{p}{(}\PY{n}{topic\PYZus{}test\PYZus{}texts}\PY{p}{)}
+
+\PY{n}{\PYZus{}}\PY{p}{,} \PY{n}{topic\PYZus{}dev\PYZus{}df}\PY{p}{,} \PY{n}{\PYZus{}} \PY{o}{=} \PY{n}{get\PYZus{}vocab}\PY{p}{(}\PY{n}{topic\PYZus{}dev\PYZus{}texts}\PY{p}{,} \PY{n}{keep\PYZus{}topN}\PY{o}{=}\PY{l+m+mi}{5000}\PY{p}{)}
+
+\PY{n}{\PYZus{}}\PY{p}{,} \PY{n}{topic\PYZus{}test\PYZus{}df}\PY{p}{,} \PY{n}{\PYZus{}} \PY{o}{=} \PY{n}{get\PYZus{}vocab}\PY{p}{(}\PY{n}{topic\PYZus{}test\PYZus{}texts}\PY{p}{,} \PY{n}{keep\PYZus{}topN}\PY{o}{=}\PY{l+m+mi}{5000}\PY{p}{)}
+
+\PY{n}{topic\PYZus{}train\PYZus{}idf} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{array}\PY{p}{(}\PY{p}{[}
+    \PY{n}{np}\PY{o}{.}\PY{n}{log10}\PY{p}{(}\PY{n}{total\PYZus{}topic\PYZus{}train\PYZus{}docs} \PY{o}{/} \PY{n}{df}\PY{p}{[}\PY{n}{v}\PY{p}{]}\PY{p}{)} \PY{k}{for} \PY{n}{v} \PY{o+ow}{in} \PY{n}{vocab}\PY{p}{]}
+\PY{p}{)}
+
+\PY{n}{topic\PYZus{}dev\PYZus{}idf} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{array}\PY{p}{(}\PY{p}{[}
+    \PY{n}{np}\PY{o}{.}\PY{n}{log10}\PY{p}{(}\PY{n}{total\PYZus{}topic\PYZus{}dev\PYZus{}docs} \PY{o}{/} \PY{n}{topic\PYZus{}dev\PYZus{}df}\PY{p}{[}\PY{n}{v}\PY{p}{]}\PY{p}{)}
+    \PY{k}{if} \PY{n}{topic\PYZus{}dev\PYZus{}df}\PY{p}{[}\PY{n}{v}\PY{p}{]} \PY{k}{else} \PY{l+m+mi}{0} \PY{k}{for} \PY{n}{v} \PY{o+ow}{in} \PY{n}{vocab}
+\PY{p}{]}\PY{p}{)}
+
+\PY{n}{topic\PYZus{}test\PYZus{}idf} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{array}\PY{p}{(}\PY{p}{[}
+    \PY{n}{np}\PY{o}{.}\PY{n}{log10}\PY{p}{(}\PY{n}{total\PYZus{}topic\PYZus{}test\PYZus{}docs} \PY{o}{/} \PY{n}{topic\PYZus{}test\PYZus{}df}\PY{p}{[}\PY{n}{v}\PY{p}{]}\PY{p}{)}
+    \PY{k}{if} \PY{n}{topic\PYZus{}test\PYZus{}df}\PY{p}{[}\PY{n}{v}\PY{p}{]} \PY{k}{else} \PY{l+m+mi}{0} \PY{k}{for} \PY{n}{v} \PY{o+ow}{in} \PY{n}{vocab}
+\PY{p}{]}\PY{p}{)}
+
+\PY{c+c1}{\PYZsh{} Use the \PYZdq{}log normalisation\PYZdq{} variant to scale TF for better results}
+\PY{n}{topic\PYZus{}train\PYZus{}tfidf} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{log10}\PY{p}{(}\PY{l+m+mi}{1} \PY{o}{+} \PY{n}{topic\PYZus{}train\PYZus{}count}\PY{p}{)} \PY{o}{*} \PY{n}{topic\PYZus{}train\PYZus{}idf}
+
+\PY{n}{topic\PYZus{}dev\PYZus{}tfidf} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{log10}\PY{p}{(}\PY{l+m+mi}{1} \PY{o}{+} \PY{n}{topic\PYZus{}dev\PYZus{}count}\PY{p}{)} \PY{o}{*} \PY{n}{topic\PYZus{}dev\PYZus{}idf}
+
+\PY{n}{topic\PYZus{}test\PYZus{}tfidf} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{log10}\PY{p}{(}\PY{l+m+mi}{1} \PY{o}{+} \PY{n}{topic\PYZus{}test\PYZus{}count}\PY{p}{)} \PY{o}{*} \PY{n}{topic\PYZus{}test\PYZus{}idf}
+\end{Verbatim}
+\end{tcolorbox}
+
+    Now you need to change \texttt{SGD} to support multiclass datasets.
+First, you need to develop a \texttt{softmax} function. It takes as
+input:
+
+\begin{itemize}
+\tightlist
+\item
+  \texttt{z}: an array of real numbers
+\end{itemize}
+
+and returns:
+
+\begin{itemize}
+\tightlist
+\item
+  \texttt{smax}: the softmax of \texttt{z}
+\end{itemize}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{42}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{k}{def} \PY{n+nf}{softmax}\PY{p}{(}\PY{n}{z}\PY{p}{)}\PY{p}{:}
+    \PY{l+s+sd}{\PYZdq{}\PYZdq{}\PYZdq{}}
+\PY{l+s+sd}{    Compute probability for each class}
+\PY{l+s+sd}{    \PYZdq{}\PYZdq{}\PYZdq{}}
+    \PY{n}{e\PYZus{}z} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{exp}\PY{p}{(}\PY{n}{z}\PY{p}{)}
+    \PY{k}{return} \PY{n}{e\PYZus{}z} \PY{o}{/} \PY{n}{np}\PY{o}{.}\PY{n}{sum}\PY{p}{(}\PY{n}{e\PYZus{}z}\PY{p}{,} \PY{n}{axis}\PY{o}{=}\PY{l+m+mi}{1} \PY{k}{if} \PY{n}{e\PYZus{}z}\PY{o}{.}\PY{n}{ndim} \PY{o}{\PYZgt{}} \PY{l+m+mi}{1} \PY{k}{else} \PY{k+kc}{None}\PY{p}{,} \PY{n}{keepdims}\PY{o}{=}\PY{k+kc}{True}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    Then modify \texttt{predict\_proba} and \texttt{predict\_class}
+functions for the multiclass case:
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{43}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{k}{def} \PY{n+nf}{predict\PYZus{}proba}\PY{p}{(}\PY{n}{X}\PY{p}{,} \PY{n}{weights}\PY{p}{)}\PY{p}{:}
+    \PY{l+s+sd}{\PYZdq{}\PYZdq{}\PYZdq{}}
+\PY{l+s+sd}{    :param weights: (3, |vocab|) shape, one weight vector for each class}
+\PY{l+s+sd}{    \PYZdq{}\PYZdq{}\PYZdq{}}
+    \PY{n}{z} \PY{o}{=} \PY{n}{X}\PY{o}{.}\PY{n}{dot}\PY{p}{(}\PY{n}{weights}\PY{o}{.}\PY{n}{T}\PY{p}{)}
+    \PY{k}{return} \PY{n}{softmax}\PY{p}{(}\PY{n}{z}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{44}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{k}{def} \PY{n+nf}{predict\PYZus{}class}\PY{p}{(}\PY{n}{X}\PY{p}{,} \PY{n}{weights}\PY{p}{)}\PY{p}{:}
+    \PY{l+s+sd}{\PYZdq{}\PYZdq{}\PYZdq{}}
+\PY{l+s+sd}{    Each document will have one probability for each class, }
+\PY{l+s+sd}{    use argmax to find the highest probability class}
+\PY{l+s+sd}{    \PYZdq{}\PYZdq{}\PYZdq{}}
+    \PY{c+c1}{\PYZsh{} Add 1 after argmax as the topic class starts from 1}
+    \PY{k}{return} \PY{n}{np}\PY{o}{.}\PY{n}{argmax}\PY{p}{(}\PY{n}{predict\PYZus{}proba}\PY{p}{(}\PY{n}{X}\PY{p}{,} \PY{n}{weights}\PY{p}{)}\PY{p}{,} \PY{n}{axis}\PY{o}{=}\PY{l+m+mi}{1}\PY{p}{)} \PY{o}{+} \PY{l+m+mi}{1}
+\end{Verbatim}
+\end{tcolorbox}
+
+    Test example and expected functionality of the functions above:
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{45}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{X} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{array}\PY{p}{(}\PY{p}{[}\PY{p}{[}\PY{l+m+mf}{0.1}\PY{p}{,} \PY{l+m+mf}{0.2}\PY{p}{]}\PY{p}{,} \PY{p}{[}\PY{l+m+mf}{0.2}\PY{p}{,} \PY{l+m+mf}{0.1}\PY{p}{]}\PY{p}{,} \PY{p}{[}\PY{l+m+mf}{0.1}\PY{p}{,} \PY{o}{\PYZhy{}}\PY{l+m+mf}{0.2}\PY{p}{]}\PY{p}{]}\PY{p}{)}
+\PY{n}{w} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{array}\PY{p}{(}\PY{p}{[}\PY{p}{[}\PY{l+m+mi}{2}\PY{p}{,} \PY{o}{\PYZhy{}}\PY{l+m+mi}{5}\PY{p}{]}\PY{p}{,} \PY{p}{[}\PY{o}{\PYZhy{}}\PY{l+m+mi}{5}\PY{p}{,} \PY{l+m+mi}{2}\PY{p}{]}\PY{p}{]}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{46}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{predict\PYZus{}proba}\PY{p}{(}\PY{n}{X}\PY{p}{,} \PY{n}{w}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+            \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
+\prompt{Out}{outcolor}{46}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+array([[0.33181223, 0.66818777],
+       [0.66818777, 0.33181223],
+       [0.89090318, 0.10909682]])
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{47}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{predict\PYZus{}class}\PY{p}{(}\PY{n}{X}\PY{p}{,} \PY{n}{w}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+            \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
+\prompt{Out}{outcolor}{47}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+array([2, 1, 1])
+\end{Verbatim}
+\end{tcolorbox}
+
+    Now you need to compute the categorical cross-entropy loss (extending
+the binary loss to support multiple classes).
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{48}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{k}{def} \PY{n+nf}{categorical\PYZus{}loss}\PY{p}{(}\PY{n}{X}\PY{p}{,} \PY{n}{Y}\PY{p}{,} \PY{n}{weights}\PY{p}{,} \PY{n}{num\PYZus{}classes}\PY{o}{=}\PY{l+m+mi}{5}\PY{p}{,} \PY{n}{alpha}\PY{o}{=}\PY{l+m+mf}{0.00001}\PY{p}{)}\PY{p}{:}
+    \PY{c+c1}{\PYZsh{} Compute the negative log\PYZhy{}likelihood and L2 regularisation for true class only}
+    \PY{n}{l} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{array}\PY{p}{(}\PY{p}{[}
+        \PY{o}{\PYZhy{}}\PY{n}{np}\PY{o}{.}\PY{n}{log}\PY{p}{(}\PY{n}{probs}\PY{p}{[}\PY{n}{Y}\PY{p}{[}\PY{n}{idx}\PY{p}{]} \PY{o}{\PYZhy{}} \PY{l+m+mi}{1}\PY{p}{]}\PY{p}{)} \PY{o}{+} \PY{n}{alpha} \PY{o}{*} \PY{n}{np}\PY{o}{.}\PY{n}{sum}\PY{p}{(}\PY{n}{weights}\PY{p}{[}\PY{n}{Y}\PY{p}{[}\PY{n}{idx}\PY{p}{]} \PY{o}{\PYZhy{}} \PY{l+m+mi}{1}\PY{p}{]}\PY{o}{*}\PY{o}{*}\PY{l+m+mi}{2}\PY{p}{)}
+        \PY{k}{for} \PY{n}{idx}\PY{p}{,} \PY{n}{probs} \PY{o+ow}{in} \PY{n+nb}{enumerate}\PY{p}{(}\PY{n}{predict\PYZus{}proba}\PY{p}{(}\PY{n}{X}\PY{p}{,} \PY{n}{weights}\PY{p}{)}\PY{p}{)}
+    \PY{p}{]}\PY{p}{)}
+
+    \PY{c+c1}{\PYZsh{} Return average loss}
+    \PY{k}{return} \PY{n}{np}\PY{o}{.}\PY{n}{mean}\PY{p}{(}\PY{n}{l}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    Finally you need to modify SGD to support the categorical cross entropy
+loss:
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{49}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{k}{def} \PY{n+nf}{SGD}\PY{p}{(}\PY{n}{X\PYZus{}tr}\PY{p}{,} \PY{n}{Y\PYZus{}tr}\PY{p}{,} \PY{n}{X\PYZus{}dev}\PY{p}{,} \PY{n}{Y\PYZus{}dev}\PY{p}{,} \PY{n}{num\PYZus{}classes}\PY{o}{=}\PY{l+m+mi}{5}\PY{p}{,} \PY{n}{lr}\PY{o}{=}\PY{l+m+mf}{0.01}\PY{p}{,} \PY{n}{alpha}\PY{o}{=}\PY{l+m+mf}{0.00001}\PY{p}{,} \PY{n}{epochs}\PY{o}{=}\PY{l+m+mi}{5}\PY{p}{,} \PY{n}{tolerance}\PY{o}{=}\PY{l+m+mf}{0.001}\PY{p}{,} \PY{n}{print\PYZus{}progress}\PY{o}{=}\PY{k+kc}{True}\PY{p}{)}\PY{p}{:}
+    \PY{c+c1}{\PYZsh{} fixing random seed for reproducibility}
+    \PY{n}{np}\PY{o}{.}\PY{n}{random}\PY{o}{.}\PY{n}{seed}\PY{p}{(}\PY{l+m+mi}{123}\PY{p}{)}
+    \PY{n}{training\PYZus{}loss\PYZus{}history} \PY{o}{=} \PY{p}{[}\PY{p}{]}
+    \PY{n}{validation\PYZus{}loss\PYZus{}history} \PY{o}{=} \PY{p}{[}\PY{p}{]}
+
+    \PY{c+c1}{\PYZsh{} Initialise weight to zero}
+    \PY{n}{weights} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{zeros}\PY{p}{(}\PY{p}{(}\PY{n}{num\PYZus{}classes}\PY{p}{,} \PY{n}{X\PYZus{}tr}\PY{o}{.}\PY{n}{shape}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{)}\PY{p}{)}
+
+    \PY{c+c1}{\PYZsh{} Create training tuples}
+    \PY{n}{train\PYZus{}docs} \PY{o}{=} \PY{n+nb}{list}\PY{p}{(}\PY{n+nb}{zip}\PY{p}{(}\PY{n}{X\PYZus{}tr}\PY{p}{,} \PY{n}{Y\PYZus{}tr}\PY{p}{)}\PY{p}{)}
+
+    \PY{k}{for} \PY{n}{epoch} \PY{o+ow}{in} \PY{n+nb}{range}\PY{p}{(}\PY{n}{epochs}\PY{p}{)}\PY{p}{:}
+        \PY{c+c1}{\PYZsh{} Randomise order in train\PYZus{}docs}
+        \PY{n}{np}\PY{o}{.}\PY{n}{random}\PY{o}{.}\PY{n}{shuffle}\PY{p}{(}\PY{n}{train\PYZus{}docs}\PY{p}{)}
+
+        \PY{k}{for} \PY{n}{x\PYZus{}i}\PY{p}{,} \PY{n}{y\PYZus{}i} \PY{o+ow}{in} \PY{n}{train\PYZus{}docs}\PY{p}{:}
+            \PY{c+c1}{\PYZsh{} Compute gradient and update weight for correct class only}
+            \PY{n}{gradient} \PY{o}{=} \PY{n}{x\PYZus{}i} \PY{o}{*} \PY{p}{(}\PY{n}{np}\PY{o}{.}\PY{n}{max}\PY{p}{(}\PY{n}{predict\PYZus{}proba}\PY{p}{(}\PY{n}{x\PYZus{}i}\PY{p}{,} \PY{n}{weights}\PY{p}{)}\PY{p}{)} \PY{o}{\PYZhy{}} \PY{l+m+mi}{1}\PY{p}{)}
+            \PY{n}{weights}\PY{p}{[}\PY{n}{y\PYZus{}i} \PY{o}{\PYZhy{}} \PY{l+m+mi}{1}\PY{p}{]} \PY{o}{\PYZhy{}}\PY{o}{=} \PY{n}{lr} \PY{o}{*} \PY{p}{(}\PY{n}{gradient} \PY{o}{+} \PY{l+m+mi}{2} \PY{o}{*} \PY{n}{alpha} \PY{o}{*} \PY{n}{weights}\PY{p}{[}\PY{n}{y\PYZus{}i} \PY{o}{\PYZhy{}} \PY{l+m+mi}{1}\PY{p}{]}\PY{p}{)}
+
+        \PY{c+c1}{\PYZsh{} Monitor training and validation loss}
+        \PY{n}{cur\PYZus{}loss\PYZus{}tr} \PY{o}{=} \PY{n}{categorical\PYZus{}loss}\PY{p}{(}\PY{n}{X\PYZus{}tr}\PY{p}{,} \PY{n}{Y\PYZus{}tr}\PY{p}{,} \PY{n}{weights}\PY{p}{,} \PY{n}{alpha}\PY{p}{)}
+        \PY{n}{cur\PYZus{}loss\PYZus{}dev} \PY{o}{=} \PY{n}{categorical\PYZus{}loss}\PY{p}{(}\PY{n}{X\PYZus{}dev}\PY{p}{,} \PY{n}{Y\PYZus{}dev}\PY{p}{,} \PY{n}{weights}\PY{p}{,} \PY{n}{alpha}\PY{p}{)}
+
+        \PY{c+c1}{\PYZsh{} Early stopping}
+        \PY{k}{if} \PY{n}{epoch} \PY{o}{\PYZgt{}} \PY{l+m+mi}{0} \PY{o+ow}{and} \PY{n}{validation\PYZus{}loss\PYZus{}history}\PY{p}{[}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{]} \PY{o}{\PYZhy{}} \PY{n}{cur\PYZus{}loss\PYZus{}dev} \PY{o}{\PYZlt{}} \PY{n}{tolerance}\PY{p}{:}
+            \PY{k}{break}
+        \PY{k}{else}\PY{p}{:}
+            \PY{n}{training\PYZus{}loss\PYZus{}history}\PY{o}{.}\PY{n}{append}\PY{p}{(}\PY{n}{cur\PYZus{}loss\PYZus{}tr}\PY{p}{)}
+            \PY{n}{validation\PYZus{}loss\PYZus{}history}\PY{o}{.}\PY{n}{append}\PY{p}{(}\PY{n}{cur\PYZus{}loss\PYZus{}dev}\PY{p}{)}
+
+        \PY{k}{if} \PY{n}{print\PYZus{}progress}\PY{p}{:}
+            \PY{n+nb}{print}\PY{p}{(}\PY{l+s+sa}{f}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Epoch: }\PY{l+s+si}{\PYZob{}epoch\PYZcb{}}\PY{l+s+s1}{ | Training loss: }\PY{l+s+si}{\PYZob{}cur\PYZus{}loss\PYZus{}tr\PYZcb{}}\PY{l+s+s1}{ | Validation loss: }\PY{l+s+si}{\PYZob{}cur\PYZus{}loss\PYZus{}dev\PYZcb{}}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+
+    \PY{k}{return} \PY{n}{weights}\PY{p}{,} \PY{n}{training\PYZus{}loss\PYZus{}history}\PY{p}{,} \PY{n}{validation\PYZus{}loss\PYZus{}history}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \hypertarget{train-and-evaluate-multi-class-logistic-regresstion-with-count-vectors}{%
+\subsection{Train and Evaluate Multi-class Logistic Regresstion with
+Count
+Vectors}\label{train-and-evaluate-multi-class-logistic-regresstion-with-count-vectors}}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{50}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{w\PYZus{}count}\PY{p}{,} \PY{n}{tr\PYZus{}loss\PYZus{}count}\PY{p}{,} \PY{n}{dev\PYZus{}loss\PYZus{}count} \PY{o}{=} \PY{n}{SGD}\PY{p}{(}\PY{n}{X\PYZus{}tr}\PY{o}{=}\PY{n}{topic\PYZus{}train\PYZus{}count}\PY{p}{,}
+                                             \PY{n}{Y\PYZus{}tr}\PY{o}{=}\PY{n}{topic\PYZus{}train\PYZus{}labels}\PY{p}{,}
+                                             \PY{n}{X\PYZus{}dev}\PY{o}{=}\PY{n}{topic\PYZus{}dev\PYZus{}count}\PY{p}{,}
+                                             \PY{n}{Y\PYZus{}dev}\PY{o}{=}\PY{n}{topic\PYZus{}dev\PYZus{}labels}\PY{p}{,}
+                                             \PY{n}{num\PYZus{}classes}\PY{o}{=}\PY{l+m+mi}{3}\PY{p}{,}
+                                             \PY{n}{lr}\PY{o}{=}\PY{l+m+mf}{0.00425}\PY{p}{,}
+                                             \PY{n}{alpha}\PY{o}{=}\PY{l+m+mf}{0.00001}\PY{p}{,}
+                                             \PY{n}{epochs}\PY{o}{=}\PY{l+m+mi}{100}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+Epoch: 0 | Training loss: 0.7193002610765054 | Validation loss:
+0.8472797399509464
+Epoch: 1 | Training loss: 0.5896685198635796 | Validation loss:
+0.7258160646161449
+Epoch: 2 | Training loss: 0.5218204362187738 | Validation loss:
+0.6525822199247686
+Epoch: 3 | Training loss: 0.4795781551716312 | Validation loss:
+0.6028664193490549
+Epoch: 4 | Training loss: 0.45059651563515823 | Validation loss:
+0.5666975050491727
+Epoch: 5 | Training loss: 0.4294016129717041 | Validation loss:
+0.5388917751301849
+Epoch: 6 | Training loss: 0.4132185781563457 | Validation loss:
+0.5168045462687523
+Epoch: 7 | Training loss: 0.40039913115898607 | Validation loss:
+0.49867941629849893
+Epoch: 8 | Training loss: 0.3899748787402841 | Validation loss:
+0.48359282655753455
+Epoch: 9 | Training loss: 0.38138850550050873 | Validation loss:
+0.4706646482635338
+Epoch: 10 | Training loss: 0.3741279282231453 | Validation loss:
+0.45958750570419776
+Epoch: 11 | Training loss: 0.3679519058737156 | Validation loss:
+0.44987825346188326
+Epoch: 12 | Training loss: 0.3625836158717799 | Validation loss:
+0.44133784596002756
+Epoch: 13 | Training loss: 0.3579459604234593 | Validation loss:
+0.43375538197900926
+Epoch: 14 | Training loss: 0.35384916583783943 | Validation loss:
+0.4269030081386849
+Epoch: 15 | Training loss: 0.35020894131077407 | Validation loss:
+0.4207520043157725
+Epoch: 16 | Training loss: 0.3469725495010658 | Validation loss:
+0.41517973731035557
+Epoch: 17 | Training loss: 0.34409158560215936 | Validation loss:
+0.4101087966211618
+Epoch: 18 | Training loss: 0.34149567784763 | Validation loss:
+0.4054771515967492
+Epoch: 19 | Training loss: 0.33913897609543986 | Validation loss:
+0.40124182309764383
+Epoch: 20 | Training loss: 0.33701344698329755 | Validation loss:
+0.3973156216617951
+Epoch: 21 | Training loss: 0.3350628979700537 | Validation loss:
+0.39370255671962967
+Epoch: 22 | Training loss: 0.3332775018537647 | Validation loss:
+0.3903481923446071
+Epoch: 23 | Training loss: 0.3316522278743371 | Validation loss:
+0.3872326014353115
+Epoch: 24 | Training loss: 0.3301385129788469 | Validation loss:
+0.38433730038532027
+Epoch: 25 | Training loss: 0.3287701214824919 | Validation loss:
+0.381601700836363
+Epoch: 26 | Training loss: 0.3274971587653633 | Validation loss:
+0.3790905944430126
+Epoch: 27 | Training loss: 0.3263177241106738 | Validation loss:
+0.3767192325751791
+Epoch: 28 | Training loss: 0.32523124545481447 | Validation loss:
+0.3744945786295051
+Epoch: 29 | Training loss: 0.32421406050722656 | Validation loss:
+0.3724061585229235
+Epoch: 30 | Training loss: 0.32328286586151 | Validation loss:
+0.3704398100994916
+Epoch: 31 | Training loss: 0.3223890786172448 | Validation loss:
+0.3685825048112624
+Epoch: 32 | Training loss: 0.3215659928071243 | Validation loss:
+0.366847255231514
+Epoch: 33 | Training loss: 0.3207988185592019 | Validation loss:
+0.3652244262904914
+Epoch: 34 | Training loss: 0.32008405223558933 | Validation loss:
+0.3636791128995939
+Epoch: 35 | Training loss: 0.3194102695321481 | Validation loss:
+0.36224073858388284
+Epoch: 36 | Training loss: 0.3187782778507206 | Validation loss:
+0.36088505460858544
+Epoch: 37 | Training loss: 0.31818569471512526 | Validation loss:
+0.35958743108410524
+Epoch: 38 | Training loss: 0.3176189009113217 | Validation loss:
+0.3583709563367372
+Epoch: 39 | Training loss: 0.3170902603516312 | Validation loss:
+0.357207124934161
+Epoch: 40 | Training loss: 0.31659186941362355 | Validation loss:
+0.35610277212173924
+Epoch: 41 | Training loss: 0.31612668860554133 | Validation loss:
+0.3550700180802673
+    \end{Verbatim}
+
+    Plot training and validation process and explain if your model overfit,
+underfit or is about right:
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{51}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{plt}\PY{o}{.}\PY{n}{plot}\PY{p}{(}\PY{n}{tr\PYZus{}loss\PYZus{}count}\PY{p}{,} \PY{n}{label}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Training loss}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{plot}\PY{p}{(}\PY{n}{dev\PYZus{}loss\PYZus{}count}\PY{p}{,} \PY{n}{label}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Validation loss}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+
+\PY{n}{plt}\PY{o}{.}\PY{n}{xlabel}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Epochs}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{ylabel}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Loss}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+
+\PY{n}{plt}\PY{o}{.}\PY{n}{title}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Training Monitoring (Multi\PYZhy{}class \PYZhy{} Count)}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+
+\PY{n}{plt}\PY{o}{.}\PY{n}{legend}\PY{p}{(}\PY{p}{)}
+
+\PY{n}{plt}\PY{o}{.}\PY{n}{show}\PY{p}{(}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_95_0.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+
+    According to the plot \textbf{Training Monitoring (Multi-class -
+Count)},
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  The training loss decreases as epoch increases and eventually reaches
+  a point of stability
+\item
+  The validation loss decreases as epoch increases and eventually
+  reaches a point of stability
+\item
+  The validation loss is slightly higher than the training loss,
+  i.e.~the ``generalisation gap'' is small
+\end{enumerate}
+
+The following techniques are implemented in the Stochastic Gradient
+Descent algorithm to avoid overfitting of the training data:
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  Early stopping
+\item
+  L2 regularisation
+\end{enumerate}
+
+Hence, the model is \textbf{about right}.
+
+    Compute accuracy, precision, recall and F1-scores:
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{52}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{args} \PY{o}{=} \PY{n}{topic\PYZus{}test\PYZus{}labels}\PY{p}{,} \PY{n}{predict\PYZus{}class}\PY{p}{(}\PY{n}{topic\PYZus{}test\PYZus{}count}\PY{p}{,} \PY{n}{w\PYZus{}count}\PY{p}{)}
+
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Accuracy:}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{accuracy\PYZus{}score}\PY{p}{(}\PY{o}{*}\PY{n}{args}\PY{p}{)}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Precision:}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{precision\PYZus{}score}\PY{p}{(}\PY{o}{*}\PY{n}{args}\PY{p}{,} \PY{n}{average}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{macro}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Recall:}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{recall\PYZus{}score}\PY{p}{(}\PY{o}{*}\PY{n}{args}\PY{p}{,} \PY{n}{average}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{macro}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{F1\PYZhy{}Score:}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{f1\PYZus{}score}\PY{p}{(}\PY{o}{*}\PY{n}{args}\PY{p}{,} \PY{n}{average}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{macro}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+Accuracy: 0.8688888888888889
+Precision: 0.8698322446387462
+Recall: 0.8688888888888888
+F1-Score: 0.8682981036467744
+    \end{Verbatim}
+
+    Print the top-10 words for each class respectively.
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{53}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{top10\PYZus{}ids} \PY{o}{=} \PY{p}{(}\PY{o}{\PYZhy{}}\PY{n}{w\PYZus{}count}\PY{p}{)}\PY{o}{.}\PY{n}{argsort}\PY{p}{(}\PY{p}{)}\PY{p}{[}\PY{p}{:}\PY{p}{,} \PY{p}{:}\PY{l+m+mi}{10}\PY{p}{]}
+
+\PY{n+nb}{print}\PY{p}{(}
+    \PY{l+s+sa}{f}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Top 10 Class 1 (World): }\PY{l+s+s1}{\PYZob{}}\PY{l+s+s1}{[vocab\PYZus{}id\PYZus{}to\PYZus{}word[id] for id in top10\PYZus{}ids[0]]\PYZcb{} }\PY{l+s+se}{\PYZbs{}n}\PY{l+s+s1}{\PYZsq{}}
+\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}
+    \PY{l+s+sa}{f}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Top 10 Class 2 (Sports): }\PY{l+s+s1}{\PYZob{}}\PY{l+s+s1}{[vocab\PYZus{}id\PYZus{}to\PYZus{}word[id] for id in top10\PYZus{}ids[1]]\PYZcb{} }\PY{l+s+se}{\PYZbs{}n}\PY{l+s+s1}{\PYZsq{}}
+\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}
+    \PY{l+s+sa}{f}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Top 10 Class 3 (Business): }\PY{l+s+s1}{\PYZob{}}\PY{l+s+s1}{[vocab\PYZus{}id\PYZus{}to\PYZus{}word[id] for id in top10\PYZus{}ids[2]]\PYZcb{} }\PY{l+s+se}{\PYZbs{}n}\PY{l+s+s1}{\PYZsq{}}
+\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+Top 10 Class 1 (World): ['said', 'reuters', 'tuesday', 'ap', 'new', 'afp',
+'wednesday', 'monday', 'over', 'president']
+
+Top 10 Class 2 (Sports): ['ap', 'tuesday', 'reuters', 'athens', 'new', 'first',
+'wednesday', 'olympic', 'team', 'said']
+
+Top 10 Class 3 (Business): ['reuters', 'said', 'new', 'tuesday', 'company',
+'oil', 'more', 'wednesday', 'over', 'about']
+
+    \end{Verbatim}
+
+    \hypertarget{features-evaluation}{%
+\subsubsection{Features Evaluation}\label{features-evaluation}}
+
+The top 10 features obtained for each class using \textbf{count vectors}
+are reasonable. Most distinguishable features are:
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  World: president
+\item
+  Sports: athens, team, olympic
+\item
+  Business: company, oil
+\end{enumerate}
+
+    \hypertarget{train-and-evaluate-multi-class-logistic-regresstion-with-tf.idf-vectors}{%
+\subsection{Train and Evaluate Multi-class Logistic Regresstion with
+TF.IDF
+Vectors}\label{train-and-evaluate-multi-class-logistic-regresstion-with-tf.idf-vectors}}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{54}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{w\PYZus{}tfidf}\PY{p}{,} \PY{n}{tr\PYZus{}loss\PYZus{}tfidf}\PY{p}{,} \PY{n}{dev\PYZus{}loss\PYZus{}tfidf} \PY{o}{=} \PY{n}{SGD}\PY{p}{(}\PY{n}{X\PYZus{}tr}\PY{o}{=}\PY{n}{topic\PYZus{}train\PYZus{}tfidf}\PY{p}{,}
+                                             \PY{n}{Y\PYZus{}tr}\PY{o}{=}\PY{n}{topic\PYZus{}train\PYZus{}labels}\PY{p}{,}
+                                             \PY{n}{X\PYZus{}dev}\PY{o}{=}\PY{n}{topic\PYZus{}dev\PYZus{}tfidf}\PY{p}{,}
+                                             \PY{n}{Y\PYZus{}dev}\PY{o}{=}\PY{n}{topic\PYZus{}dev\PYZus{}labels}\PY{p}{,}
+                                             \PY{n}{num\PYZus{}classes}\PY{o}{=}\PY{l+m+mi}{3}\PY{p}{,}
+                                             \PY{n}{lr}\PY{o}{=}\PY{l+m+mf}{0.01525}\PY{p}{,}
+                                             \PY{n}{alpha}\PY{o}{=}\PY{l+m+mf}{0.00001}\PY{p}{,}
+                                             \PY{n}{epochs}\PY{o}{=}\PY{l+m+mi}{100}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+Epoch: 0 | Training loss: 0.7216613877125208 | Validation loss:
+0.8796561762011178
+Epoch: 1 | Training loss: 0.5732100682261018 | Validation loss:
+0.7641111956389048
+Epoch: 2 | Training loss: 0.49377035863697055 | Validation loss:
+0.6908691542400103
+Epoch: 3 | Training loss: 0.44430555137295413 | Validation loss:
+0.6395878142758307
+Epoch: 4 | Training loss: 0.41057206955841585 | Validation loss:
+0.6012886245734651
+Epoch: 5 | Training loss: 0.38611747927519485 | Validation loss:
+0.5713468972678108
+Epoch: 6 | Training loss: 0.36760111800118694 | Validation loss:
+0.547183982193356
+Epoch: 7 | Training loss: 0.3530861584965032 | Validation loss:
+0.5271780886441223
+Epoch: 8 | Training loss: 0.34138522886689704 | Validation loss:
+0.5102887736087635
+Epoch: 9 | Training loss: 0.33180474145198685 | Validation loss:
+0.4957813868840507
+Epoch: 10 | Training loss: 0.3237883357829469 | Validation loss:
+0.4831859213043515
+Epoch: 11 | Training loss: 0.31701151756974283 | Validation loss:
+0.4721060633029888
+Epoch: 12 | Training loss: 0.3111920769196296 | Validation loss:
+0.46226633281861684
+Epoch: 13 | Training loss: 0.3061611449230146 | Validation loss:
+0.4534696846428462
+Epoch: 14 | Training loss: 0.3017634499498516 | Validation loss:
+0.44553341904044524
+Epoch: 15 | Training loss: 0.2978902878322566 | Validation loss:
+0.4383475773153043
+Epoch: 16 | Training loss: 0.29445233103346347 | Validation loss:
+0.43179192167759445
+Epoch: 17 | Training loss: 0.2913836085390561 | Validation loss:
+0.42579119375575347
+Epoch: 18 | Training loss: 0.28863137970457464 | Validation loss:
+0.42027121984281385
+Epoch: 19 | Training loss: 0.28614677081394785 | Validation loss:
+0.4151778784104535
+Epoch: 20 | Training loss: 0.2839002891678337 | Validation loss:
+0.4104591522615232
+Epoch: 21 | Training loss: 0.28184998806060024 | Validation loss:
+0.4060762705303559
+Epoch: 22 | Training loss: 0.27997903501469407 | Validation loss:
+0.40198968347415437
+Epoch: 23 | Training loss: 0.27826582375683234 | Validation loss:
+0.3981721013657458
+Epoch: 24 | Training loss: 0.27668994853239365 | Validation loss:
+0.39459251371299553
+Epoch: 25 | Training loss: 0.27524601132429655 | Validation loss:
+0.3912295013213029
+Epoch: 26 | Training loss: 0.2739076709496832 | Validation loss:
+0.388071893939498
+Epoch: 27 | Training loss: 0.27266755650141156 | Validation loss:
+0.38508836604119007
+Epoch: 28 | Training loss: 0.27151469116302523 | Validation loss:
+0.3822723012542653
+Epoch: 29 | Training loss: 0.2704419241518709 | Validation loss:
+0.37961139968871077
+Epoch: 30 | Training loss: 0.2694400054687701 | Validation loss:
+0.37709258741715623
+Epoch: 31 | Training loss: 0.26849655065408085 | Validation loss:
+0.37470494376308766
+Epoch: 32 | Training loss: 0.26761176013623694 | Validation loss:
+0.3724396704522926
+Epoch: 33 | Training loss: 0.2667809079651415 | Validation loss:
+0.3702874590035597
+Epoch: 34 | Training loss: 0.26599920091018975 | Validation loss:
+0.3682392665867102
+Epoch: 35 | Training loss: 0.2652580201876892 | Validation loss:
+0.36629056444841157
+Epoch: 36 | Training loss: 0.2645581525056726 | Validation loss:
+0.36443690460228395
+Epoch: 37 | Training loss: 0.26389292093163713 | Validation loss:
+0.36266558432498897
+Epoch: 38 | Training loss: 0.2632625797151061 | Validation loss:
+0.36097795261378623
+Epoch: 39 | Training loss: 0.2626658794178356 | Validation loss:
+0.35936333694682965
+Epoch: 40 | Training loss: 0.262107592667451 | Validation loss:
+0.3578179571167204
+Epoch: 41 | Training loss: 0.26158555003504186 | Validation loss:
+0.35633898190515806
+Epoch: 42 | Training loss: 0.2610928517567859 | Validation loss:
+0.35492447392111276
+Epoch: 43 | Training loss: 0.26063211492812255 | Validation loss:
+0.35356715144247175
+Epoch: 44 | Training loss: 0.26020243296906287 | Validation loss:
+0.352265003669526
+Epoch: 45 | Training loss: 0.2597947549456166 | Validation loss:
+0.351017052072764
+Epoch: 46 | Training loss: 0.2594108128651522 | Validation loss:
+0.3498153377396113
+Epoch: 47 | Training loss: 0.2590508116974682 | Validation loss:
+0.34866259902147856
+Epoch: 48 | Training loss: 0.25870849188461426 | Validation loss:
+0.3475553277125509
+Epoch: 49 | Training loss: 0.2583835221851026 | Validation loss:
+0.3464910397613905
+Epoch: 50 | Training loss: 0.25807637950593315 | Validation loss:
+0.3454642341847235
+    \end{Verbatim}
+
+    Plot training and validation process and explain if your model overfit,
+underfit or is about right:
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{55}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{plt}\PY{o}{.}\PY{n}{plot}\PY{p}{(}\PY{n}{tr\PYZus{}loss\PYZus{}tfidf}\PY{p}{,} \PY{n}{label}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Training loss}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{plot}\PY{p}{(}\PY{n}{dev\PYZus{}loss\PYZus{}tfidf}\PY{p}{,} \PY{n}{label}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Validation loss}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+
+\PY{n}{plt}\PY{o}{.}\PY{n}{xlabel}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Epochs}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{ylabel}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Loss}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+
+\PY{n}{plt}\PY{o}{.}\PY{n}{title}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Training Monitoring (Multi\PYZhy{}class \PYZhy{} TFIDF)}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+
+\PY{n}{plt}\PY{o}{.}\PY{n}{legend}\PY{p}{(}\PY{p}{)}
+
+\PY{n}{plt}\PY{o}{.}\PY{n}{show}\PY{p}{(}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_105_0.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+
+    According to the plot \textbf{Training Monitoring (Multi-class -
+TFIDF)},
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  The training loss decreases as epoch increases and eventually reaches
+  a point of stability
+\item
+  The validation loss decreases as epoch increases and eventually
+  reaches a point of stability
+\item
+  The validation loss is slightly higher than the training loss,
+  i.e.~the ``generalisation gap'' is small
+\end{enumerate}
+
+The following techniques are implemented in the Stochastic Gradient
+Descent algorithm to avoid overfitting of the training data:
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  Early stopping
+\item
+  L2 regularisation
+\end{enumerate}
+
+Hence, the model is \textbf{about right}.
+
+    Compute accuracy, precision, recall and F1-scores:
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{56}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{args} \PY{o}{=} \PY{n}{topic\PYZus{}test\PYZus{}labels}\PY{p}{,} \PY{n}{predict\PYZus{}class}\PY{p}{(}\PY{n}{topic\PYZus{}test\PYZus{}tfidf}\PY{p}{,} \PY{n}{w\PYZus{}tfidf}\PY{p}{)}
+
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Accuracy:}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{accuracy\PYZus{}score}\PY{p}{(}\PY{o}{*}\PY{n}{args}\PY{p}{)}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Precision:}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{precision\PYZus{}score}\PY{p}{(}\PY{o}{*}\PY{n}{args}\PY{p}{,} \PY{n}{average}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{macro}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Recall:}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{recall\PYZus{}score}\PY{p}{(}\PY{o}{*}\PY{n}{args}\PY{p}{,} \PY{n}{average}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{macro}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{F1\PYZhy{}Score:}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{f1\PYZus{}score}\PY{p}{(}\PY{o}{*}\PY{n}{args}\PY{p}{,} \PY{n}{average}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{macro}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+Accuracy: 0.8966666666666666
+Precision: 0.8970314657551683
+Recall: 0.8966666666666666
+F1-Score: 0.8960678070376614
+    \end{Verbatim}
+
+    Print the top-10 words for each class respectively.
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{57}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{top10\PYZus{}ids} \PY{o}{=} \PY{p}{(}\PY{o}{\PYZhy{}}\PY{n}{w\PYZus{}tfidf}\PY{p}{)}\PY{o}{.}\PY{n}{argsort}\PY{p}{(}\PY{p}{)}\PY{p}{[}\PY{p}{:}\PY{p}{,} \PY{p}{:}\PY{l+m+mi}{10}\PY{p}{]}
+
+\PY{n+nb}{print}\PY{p}{(}
+    \PY{l+s+sa}{f}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Top 10 Class 1 (World): }\PY{l+s+s1}{\PYZob{}}\PY{l+s+s1}{[vocab\PYZus{}id\PYZus{}to\PYZus{}word[id] for id in top10\PYZus{}ids[0]]\PYZcb{} }\PY{l+s+se}{\PYZbs{}n}\PY{l+s+s1}{\PYZsq{}}
+\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}
+    \PY{l+s+sa}{f}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Top 10 Class 2 (Sports): }\PY{l+s+s1}{\PYZob{}}\PY{l+s+s1}{[vocab\PYZus{}id\PYZus{}to\PYZus{}word[id] for id in top10\PYZus{}ids[1]]\PYZcb{} }\PY{l+s+se}{\PYZbs{}n}\PY{l+s+s1}{\PYZsq{}}
+\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}
+    \PY{l+s+sa}{f}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Top 10 Class 3 (Business): }\PY{l+s+s1}{\PYZob{}}\PY{l+s+s1}{[vocab\PYZus{}id\PYZus{}to\PYZus{}word[id] for id in top10\PYZus{}ids[2]]\PYZcb{}}\PY{l+s+s1}{\PYZsq{}}
+\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+Top 10 Class 1 (World): ['said', 'afp', 'ap', 'president', 'tuesday', 'monday',
+'new', 'state', 'reuters', 'government']
+
+Top 10 Class 2 (Sports): ['ap', 'athens', 'olympic', 'team', 'first',
+'olympics', 'no', 'two', 'season', 'tuesday']
+
+Top 10 Class 3 (Business): ['company', 'said', 'oil', 'new', 'reuters', 'more',
+'business', 'million', 'prices', 'about']
+    \end{Verbatim}
+
+    \hypertarget{features-evaluation}{%
+\subsubsection{Features Evaluation}\label{features-evaluation}}
+
+The top 10 features obtained for each class using \textbf{TF.IDF
+vectors} are reasonable. They are more relevant than the features
+obtained using \textbf{count vectors}. Most distinguishable features
+are:
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  World: president, state, government
+\item
+  Sports: athens, olympic, team, olympics, season
+\item
+  Business: company, oil. business, million, prices
+\end{enumerate}
+
+    \hypertarget{if-we-were-to-apply-the-classifier-weve-learned-into-a-different-domain-such-as-laptop-reviews-or-restaurant-reviews-do-you-think-these-features-would-generalise-well}{%
+\subsection{If we were to apply the classifier we've learned into a
+different domain such as laptop reviews or restaurant reviews, do you
+think these features would generalise
+well?}\label{if-we-were-to-apply-the-classifier-weve-learned-into-a-different-domain-such-as-laptop-reviews-or-restaurant-reviews-do-you-think-these-features-would-generalise-well}}
+
+\hypertarget{count-vectors-and-tf.idf-vectors}{%
+\subsubsection{Count Vectors and TF.IDF
+Vectors}\label{count-vectors-and-tf.idf-vectors}}
+
+Both count vectors model and TF.IDF vectors \textbf{would not generalise
+well}. The overall explanation is similar to the one in Binary models,
+with a few differences regarding the top features obtained.
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  The top features obtained by the Multi-Class models do not include any
+  sentiment lexicons (e.g.~good, bad, etc.).
+\item
+  Most of the top features apart of general-purpose words (e.g.~said,
+  about, etc.) are not applicable to laptop or movie reviews.
+\end{enumerate}
+
+Therefore, Multi-Class models are less generalised and would have worse
+performance than the Binary models in the new domains.
+
+    \hypertarget{discuss-how-did-you-choose-model-hyperparameters-e.g.-learning-rate-and-regularisation-strength-what-is-the-relation-between-training-epochs-and-learning-rate-how-does-the-regularisation-strength-affect-performance}{%
+\subsection{Discuss how did you choose model hyperparameters
+(e.g.~learning rate and regularisation strength)? What is the relation
+between training epochs and learning rate? How does the regularisation
+strength affect
+performance?}\label{discuss-how-did-you-choose-model-hyperparameters-e.g.-learning-rate-and-regularisation-strength-what-is-the-relation-between-training-epochs-and-learning-rate-how-does-the-regularisation-strength-affect-performance}}
+
+\textbf{Note:} Many similar explanations are already written in the
+hyperparameters discussion for \textbf{Binary Logistic Regression},
+hence they are not repeated here.
+
+Similarly, the initial lower and upper bound of learning rate is set to
+\texttt{0.0001} and \texttt{0.1} respectively. The initial lower and
+upper bound of regularisation strength is set to \texttt{0.00001} and
+\texttt{0.01} respectively.
+
+\hypertarget{count-vectors}{%
+\subsubsection{Count Vectors}\label{count-vectors}}
+
+\hypertarget{optimising-learning-rate}{%
+\paragraph{Optimising Learning Rate}\label{optimising-learning-rate}}
+
+Initial parameters: \texttt{lr=0.0001,\ alpha=0.00001}
+
+\begin{longtable}[]{@{}llllllll@{}}
+\toprule
+Trial & Learning rate & Epochs & Tr. loss & Val. loss & Precision &
+Recall & F1-Score\tabularnewline
+\midrule
+\endhead
+0 & 0.0001 & 99 & 0.5631 & 0.6983 & 0.8343 & 0.8333 &
+0.8325\tabularnewline
+1 & 0.0005 & 99 & 0.3693 & 0.4527 & 0.8600 & 0.8588 &
+0.8580\tabularnewline
+2 & 0.001 & 82 & 0.3399 & 0.4035 & 0.8619 & 0.8611 &
+0.8603\tabularnewline
+3 & 0.002 & 61 & 0.3247 & 0.3742 & 0.8650 & 0.8644 &
+0.8637\tabularnewline
+4 & 0.003 & 50 & 0.3192 & 0.3623 & 0.8662 & 0.8655 &
+0.8648\tabularnewline
+5 & 0.004 & 42 & 0.3167 & 0.3566 & 0.8698 & 0.8688 &
+0.8682\tabularnewline
+6 & 0.005 & 38 & 0.3147 & 0.3514 & 0.8688 & 0.8677 &
+0.8672\tabularnewline
+7 & 0.0045 & 40 & 0.3155 & 0.3536 & 0.8687 & 0.8677 &
+0.8672\tabularnewline
+8 & 0.00425 & 41 & 0.3161 & 0.3550 & 0.8698 & 0.8688 &
+0.8682\tabularnewline
+\bottomrule
+\end{longtable}
+
+The optimal \texttt{lr} is found to be \texttt{0.00425}
+
+\hypertarget{optimising-regularisation-strength}{%
+\paragraph{Optimising Regularisation
+Strength}\label{optimising-regularisation-strength}}
+
+Initial parameters: \texttt{lr=0.00425,\ alpha=0.00001}
+
+\begin{longtable}[]{@{}llllllll@{}}
+\toprule
+Trial & Alpha & Epochs & Tr. loss & Val. loss & Precision & Recall &
+F1-Score\tabularnewline
+\midrule
+\endhead
+0 & 0.00001 & 41 & 0.3161 & 0.3550 & 0.8698 & 0.8688 &
+0.8682\tabularnewline
+1 & 0.00002 & 41 & 0.3160 & 0.3552 & 0.8698 & 0.8688 &
+0.8682\tabularnewline
+2 & 0.000015 & 41 & 0.3160 & 0.3551 & 0.8698 & 0.8688 &
+0.8682\tabularnewline
+3 & 0.0001 & 41 & 0.3154 & 0.3565 & 0.8698 & 0.8688 &
+0.8682\tabularnewline
+\bottomrule
+\end{longtable}
+
+No better \texttt{alpha} values have been found. The initial
+\texttt{alpha} is considered to be the optimal value.
+
+\textbf{Conclusion:} Based on the trials above, it can be concluded that
+the optimal values are \texttt{lr=0.00425} and \texttt{alpha=0.00001}
+
+\hypertarget{tf.idf-vectors}{%
+\subsubsection{TF.IDF Vectors}\label{tf.idf-vectors}}
+
+\hypertarget{optimising-learning-rate-1}{%
+\paragraph{Optimising Learning rate}\label{optimising-learning-rate-1}}
+
+Initial parameters: \texttt{lr=0.0001,\ alpha=0.00001}
+
+\begin{longtable}[]{@{}llllllll@{}}
+\toprule
+Trial & Learning rate & Epochs & Tr. loss & Val. loss & Precision &
+Recall & F1-Score\tabularnewline
+\midrule
+\endhead
+0 & 0.0001 & 99 & 0.8116 & 0.9398 & 0.8765 & 0.8766 &
+0.8758\tabularnewline
+1 & 0.001 & 99 & 0.3748 & 0.5592 & 0.8882 & 0.8877 &
+0.8869\tabularnewline
+2 & 0.003 & 99 & 0.2849 & 0.4173 & 0.8914 & 0.8911 &
+0.8904\tabularnewline
+3 & 0.005 & 82 & 0.2716 & 0.3877 & 0.8937 & 0.8933 &
+0.8927\tabularnewline
+4 & 0.007 & 72 & 0.2653 & 0.3715 & 0.8946 & 0.8944 &
+0.8937\tabularnewline
+5 & 0.01 & 61 & 0.2609 & 0.3584 & 0.8945 & 0.8944 &
+0.8937\tabularnewline
+6 & 0.011 & 59 & 0.2597 & 0.3546 & 0.8947 & 0.8944 &
+0.8938\tabularnewline
+7 & 0.013 & 54 & 0.2587 & 0.3499 & 0.8958 & 0.8955 &
+0.8949\tabularnewline
+8 & 0.015 & 51 & 0.2579 & 0.3453 & 0.8970 & 0.8966 &
+0.8960\tabularnewline
+9 & 0.017 & 47 & 0.2578 & 0.3430 & 0.8938 & 0.8933 &
+0.8927\tabularnewline
+10 & 0.016 & 49 & 0.2578 & 0.3440 & 0.8959 & 0.8955 &
+0.8950\tabularnewline
+11 & 0.0155 & 50 & 0.2579 & 0.3446 & 0.8959 & 0.8955 &
+0.8950\tabularnewline
+12 & 0.01525 & 50 & 0.2580 & 0.3454 & 0.8970 & 0.8966 &
+0.8960\tabularnewline
+\bottomrule
+\end{longtable}
+
+The optimal \texttt{lr} is found to be \texttt{0.01525}
+
+\hypertarget{optimising-regularisation-strength-1}{%
+\paragraph{Optimising Regularisation
+Strength}\label{optimising-regularisation-strength-1}}
+
+Initial parameters: \texttt{lr=0.0152,\ alpha=0.00001}
+
+\begin{longtable}[]{@{}llllllll@{}}
+\toprule
+Trial & Learning rate & Epochs & Tr. loss & Val. loss & Precision &
+Recall & F1-Score\tabularnewline
+\midrule
+\endhead
+0 & 0.00001 & 50 & 0.2580 & 0.3454 & 0.8970 & 0.8966 &
+0.8960\tabularnewline
+1 & 0.00002 & 50 & 0.2578 & 0.3466 & 0.8970 & 0.8966 &
+0.8960\tabularnewline
+2 & 0.000015 & 50 & 0.2579 & 0.3461 & 0.8970 & 0.8966 &
+0.8960\tabularnewline
+3 & 0.0001 & 48 & 0.2572 & 0.3565 & 0.8970 & 0.8966 &
+0.8960\tabularnewline
+\bottomrule
+\end{longtable}
+
+No better \texttt{alpha} has been found. The initial \texttt{alpha} is
+considered to be the optimal value.
+
+\textbf{Conclusion:} Based on the trials above, it can be concluded that
+the optimal values are \texttt{lr=0.01525} and \texttt{alpha=0.00001}
+
+\hypertarget{relationship-between-epochs-and-learning-rate}{%
+\subsubsection{Relationship Between Epochs and Learning
+Rate}\label{relationship-between-epochs-and-learning-rate}}
+
+According to the tables above, it has been shown that the higher the
+learning rate, the lower the epochs required to converge. This
+relationship is the same as the one in \textbf{Binary Logistic
+Regression}, hence the type of model does not affect the relationship
+between epochs and learning rate.
+
+\hypertarget{relationship-between-regularisation-strength-and-model-performance}{%
+\subsubsection{Relationship Between Regularisation Strength and Model
+Performance}\label{relationship-between-regularisation-strength-and-model-performance}}
+
+According to the tables above, it has been shown that the higher the
+regularisation strength, the lower the epochs required to converge.
+Moreover, the training and validation loss increase as the
+regularisation strength increases. This relationship is the same as the
+one in \textbf{Binary Logistic Regression}.
+
+However, no performance improvement is observed in both \textbf{Count
+Vectors} and \textbf{TF.IDF Vectors} of this multi-class model.
+
+Therefore, there is not enough evidence to state that the relationship
+between regularisation strength and model performance is consistent
+across different types of models.
+
+    \hypertarget{full-results}{%
+\subsection{Full Results}\label{full-results}}
+
+\begin{longtable}[]{@{}cccc@{}}
+\toprule
+LR & Precision & Recall & F1-Score\tabularnewline
+\midrule
+\endhead
+BOW-count & 0.8698296951326174 & 0.8688888888888888 &
+0.868323408492766\tabularnewline
+BOW-tfidf & 0.8970314657551683 & 0.8966666666666666 &
+0.8960678070376614\tabularnewline
+\bottomrule
+\end{longtable}
+
+    \hypertarget{justifications-for-implementation-choices}{%
+\section{Justifications for Implementation
+Choices}\label{justifications-for-implementation-choices}}
+
+\hypertarget{lower-case-for-n-gram}{%
+\subsection{Lower Case for N-gram}\label{lower-case-for-n-gram}}
+
+Since the actual sentence structure and word order is not taken into
+account by the classifier, reducing all n-grams to lower case is a good
+strategy. It will allow instances of ``\emph{Best}'' at the beginning of
+a sentence to be considered as ``\emph{best}''. This will also help the
+model to identify features more accurately.
+
+\hypertarget{performance-improvement}{%
+\subsubsection{Performance Improvement}\label{performance-improvement}}
+
+Performance improvement is achieved in \textbf{Multi-class TFIDF
+Vectors}, as shown in the following table:
+
+\begin{longtable}[]{@{}cccc@{}}
+\toprule
+MLR TFIDF & Precision & Recall & F1-Score\tabularnewline
+\midrule
+\endhead
+Without lowercase & 0.8859205236286744 & 0.8855555555555555 &
+0.8848282934618362\tabularnewline
+With lowercase & 0.8970314657551683 & 0.8966666666666666 &
+0.8960678070376614\tabularnewline
+\bottomrule
+\end{longtable}
+
+\hypertarget{top-10-features-weight}{%
+\subsubsection{Top 10 Features Weight}\label{top-10-features-weight}}
+
+Without lower case preprocessing:
+
+\begin{itemize}
+\tightlist
+\item
+  World: `The', `said', `AFP', `AP', `Tuesday', `Monday', `President',
+  `Reuters', `new', `people'
+\item
+  Sports: `AP', `The', `Olympic', `ATHENS', `first', `Olympics', `team',
+  `two', `Tuesday', `season'
+\item
+  Business: `The', `company', `said', `oil', `Reuters', `new', `more',
+  `US', `prices', `business'
+\end{itemize}
+
+With lower case preprocessing:
+
+\begin{itemize}
+\tightlist
+\item
+  World: `said', `afp', `ap', `president', `tuesday', `monday', `new',
+  `state', `reuters', `government'
+\item
+  Sports: `ap', `athens', `olympic', `team', `first', `olympics', `no',
+  `two', `season', `tuesday'
+\item
+  Business: `company', `said', `oil', `new', `reuters', `more',
+  `business', `million', `prices', `about'
+\end{itemize}
+
+The most noticeable difference is the increases in weight for more
+important terms in the following classes:
+
+\begin{itemize}
+\tightlist
+\item
+  World: `president', `state', `government'
+\item
+  Business: `business', `million'
+\end{itemize}
+
+\hypertarget{log-normalisation-scheme-for-term-frequency}{%
+\subsection{Log Normalisation Scheme for Term
+Frequency}\label{log-normalisation-scheme-for-term-frequency}}
+
+Raw term frequency might not be ideal because:
+
+\begin{itemize}
+\tightlist
+\item
+  It is known that a document with \texttt{tf\ =\ 10} occurrences for a
+  term is more relevant than a document with \texttt{tf\ =\ 1}
+  occurrence for that term
+\item
+  However, this does not indicate that the document with
+  \texttt{tf\ =\ 10} is 10 times more relevant than \texttt{tf\ =\ 1}
+\end{itemize}
+
+Hence, relevance does not increase proportionally with term frequency.
+Using a sublinear function to calculate term frequency will help to
+reduce the importance of the term that has a high frequency.
+
+\hypertarget{performance-improvement-1}{%
+\subsubsection{Performance
+Improvement}\label{performance-improvement-1}}
+
+\begin{longtable}[]{@{}cccc@{}}
+\toprule
+BLR TF Scheme & Precision & Recall & F1-Score\tabularnewline
+\midrule
+\endhead
+Raw frequency & 0.8507462686567164 & 0.855 &
+0.8528678304239402\tabularnewline
+Log scaled & 0.9025641025641026 & 0.88 &
+0.8911392405063291\tabularnewline
+\bottomrule
+\end{longtable}
+
+\begin{longtable}[]{@{}cccc@{}}
+\toprule
+MLR TF Scheme & Precision & Recall & F1-Score\tabularnewline
+\midrule
+\endhead
+Raw frequency & 0.8822875333701315 & 0.8822222222222221 &
+0.8816177693062457\tabularnewline
+Log scaled & 0.8970314657551683 & 0.8966666666666666 &
+0.8960678070376614\tabularnewline
+\bottomrule
+\end{longtable}
+
+\hypertarget{top-10-features-weight-1}{%
+\subsubsection{Top 10 Features Weight}\label{top-10-features-weight-1}}
+
+The model is able to identify more relevant features using the log
+normalisation TF weighting scheme.
+
+\hypertarget{binary-logistic-regression-tf.idf}{%
+\paragraph{Binary Logistic Regression
+TF.IDF}\label{binary-logistic-regression-tf.idf}}
+
+Raw frequency TF weighting scheme:
+
+\begin{itemize}
+\item
+  Positive: `great', `fun', `hilarious', `terrific', `overall',
+  `definitely', `memorable', `truman', `pulp', `perfectly'
+\item
+  Negative: `nbsp', `bad', `worst', `boring', `supposed',
+  `unfortunately', `nothing', `why', `waste', `script'
+\end{itemize}
+
+Log normalisation TF weighting scheme:
+
+\begin{itemize}
+\item
+  Positive: `hilarious', `perfectly', `terrific', `great', `memorable',
+  `overall', `definitely', `perfect', `excellent', `fun'
+\item
+  Negative: `bad', `worst', `boring', `supposed', `unfortunately',
+  `ridiculous', `waste', `script', `awful', `nothing'
+\end{itemize}
+
+\hypertarget{multi-class-logistic-regression-tf.idf}{%
+\paragraph{Multi-Class Logistic Regression
+TF.IDF}\label{multi-class-logistic-regression-tf.idf}}
+
+Raw frequency TF weighting scheme:
+
+\begin{itemize}
+\item
+  World: `said', `afp', `ap', `president', `tuesday', `new', `monday',
+  `state', `reuters', `government'
+\item
+  Sports: `ap', `athens', `olympic', `team', `quot', `no', `first',
+  `olympics', `tuesday', `one'
+\item
+  Business: `company', `oil', `said', `new', `more', `reuters',
+  `business', `over', `about', `up'
+\end{itemize}
+
+Log normalisation TF weighting scheme:
+
+\begin{itemize}
+\item
+  World: `said', `afp', `ap', `president', `tuesday', `monday', `new',
+  `state', `reuters', `government'
+\item
+  Sports: `ap', `athens', `olympic', `team', `first', `olympics', `no',
+  `two', `season', `tuesday'
+\item
+  Business: `company', `said', `oil', `new', `reuters', `more',
+  `business', `million', `prices', `about'
+\end{itemize}
+
+
+    % Add a bibliography block to the postdoc
+
+
+
+\end{document}
